@@ -39,14 +39,11 @@ io.on("connection", (socket) => {
     }
   });
 
-  fs.watch(
-    "/home/john/workspace/moneybox/socket.io/money.txt",
-    (eventType, filename) => {
-      //  console.log("\nThe file", filename, "was modified!");
-      //  console.log("The type of change was:", eventType);
-      socket.emit("event", "pong");
-    }
-  );
+  fs.watch("public/money.txt", (eventType, filename) => {
+    //  console.log("\nThe file", filename, "was modified!");
+    //  console.log("The type of change was:", eventType);
+    socket.emit("event", "pong");
+  });
 });
 
 io.on("event", (socket) => {

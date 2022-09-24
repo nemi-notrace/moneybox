@@ -1,7 +1,12 @@
 import { json } from "@remix-run/node";
 import { useEffect, useRef, useState } from "react";
 import { useSocket } from "~/context";
-import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
+import {
+  useActionData,
+  useFetcher,
+  useLoaderData,
+  Outlet,
+} from "@remix-run/react";
 import { Box, VStack, Text, Container, Progress } from "@chakra-ui/react";
 import fs from "fs-extra";
 import { HStack } from "@chakra-ui/react";
@@ -27,12 +32,7 @@ export async function loader() {
         image: "/1.jpg",
       },
     ],
-    money: parseInt(
-      fs.readFileSync(
-        "/home/john/workspace/moneybox/socket.io/money.txt",
-        "utf8"
-      )
-    ),
+    money: parseInt(fs.readFileSync("public/money.txt", "utf8")),
   };
 
   return json(data);
@@ -113,6 +113,9 @@ export default function Index() {
             <Box width="100px">
               <img src="/schuhe.jpg" />
             </Box>
+            <div className="jokes-outlet">
+              <Outlet />
+            </div>
           </HStack>
         </VStack>
       </VStack>

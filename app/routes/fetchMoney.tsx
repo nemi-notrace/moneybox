@@ -25,12 +25,7 @@ export async function loader() {
         image: "/1.jpg",
       },
     ],
-    money: parseInt(
-      fs.readFileSync(
-        "/home/john/workspace/moneybox/socket.io/money.txt",
-        "utf8"
-      )
-    ),
+    money: parseInt(fs.readFileSync("public/money.txt", "utf8")),
   };
 
   return json(data);

@@ -140,13 +140,14 @@ function App() {
   }, /* @__PURE__ */ import_react5.default.createElement(import_react4.Outlet, null))), /* @__PURE__ */ import_react5.default.createElement(import_react4.ScrollRestoration, null), /* @__PURE__ */ import_react5.default.createElement(import_react4.Scripts, null), /* @__PURE__ */ import_react5.default.createElement(import_react4.LiveReload, null)));
 }
 
-// route:/home/john/workspace/moneybox/socket.io/app/routes/products/index.tsx
-var products_exports = {};
-__export(products_exports, {
+// route:/home/john/workspace/moneybox/socket.io/app/routes/products/$id.tsx
+var id_exports = {};
+__export(id_exports, {
   CatchBoundary: () => CatchBoundary,
   ErrorBoundary: () => ErrorBoundary,
-  default: () => ProductsIndexRoute,
-  loader: () => loader
+  action: () => action,
+  loader: () => loader,
+  meta: () => meta
 });
 var import_node = require("@remix-run/node");
 var import_react7 = require("@remix-run/react");
@@ -161,71 +162,6 @@ if (true) {
     global.__db = new import_client.PrismaClient();
   }
   db = global.__db;
-}
-
-// route:/home/john/workspace/moneybox/socket.io/app/routes/products/index.tsx
-var loader = async ({ request, params }) => {
-  const products = await db.product.findMany();
-  const data = { products };
-  return (0, import_node.json)(products);
-};
-function ProductsIndexRoute() {
-  const data = (0, import_react7.useLoaderData)();
-  data.map((item, i) => {
-    console.log(item.name);
-  });
-  return /* @__PURE__ */ React.createElement("div", null, data ? data.map((item, i) => {
-    return /* @__PURE__ */ React.createElement("div", {
-      key: i
-    }, /* @__PURE__ */ React.createElement("p", null, item.name), /* @__PURE__ */ React.createElement("p", null, item.price), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement(import_react7.Link, {
-      to: item.id
-    }, "Bearbeiten")));
-  }) : "Bitte f\xFCge ein neues Ziel hinzu.", /* @__PURE__ */ React.createElement(import_react7.Link, {
-    to: "new"
-  }, "Neues Ziel Hinzuf\xFCgen"));
-}
-function CatchBoundary() {
-  const caught = (0, import_react7.useCatch)();
-  if (caught.status === 404) {
-    return /* @__PURE__ */ React.createElement("div", {
-      className: "error-container"
-    }, /* @__PURE__ */ React.createElement("p", null, "There are no products to display."), /* @__PURE__ */ React.createElement(import_react7.Link, {
-      to: "new"
-    }, "Neues Ziel Hinzuf\xFCgen"));
-  }
-  throw new Error(`Unexpected caught response with status: ${caught.status}`);
-}
-function ErrorBoundary({ error }) {
-  console.error(error);
-  return /* @__PURE__ */ React.createElement("div", null, "I did a whoopsies.");
-}
-
-// route:/home/john/workspace/moneybox/socket.io/app/routes/products/$id.tsx
-var id_exports = {};
-__export(id_exports, {
-  CatchBoundary: () => CatchBoundary2,
-  ErrorBoundary: () => ErrorBoundary2,
-  action: () => action,
-  default: () => ProductsRoute,
-  loader: () => loader2,
-  meta: () => meta
-});
-var import_node2 = require("@remix-run/node");
-var import_react9 = require("@remix-run/react");
-
-// app/components/product.tsx
-var import_react8 = require("@remix-run/react");
-function ProductDisplay({
-  product
-}) {
-  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", null, "Dein neues Ziel:"), /* @__PURE__ */ React.createElement("p", null, product.name), /* @__PURE__ */ React.createElement("p", null, product.price), /* @__PURE__ */ React.createElement(import_react8.Link, {
-    to: "."
-  }, product.name, " Permalink"), /* @__PURE__ */ React.createElement(import_react8.Form, {
-    method: "delete"
-  }, /* @__PURE__ */ React.createElement("button", {
-    type: "submit",
-    className: "button"
-  }, "L\xF6schen")));
 }
 
 // route:/home/john/workspace/moneybox/socket.io/app/routes/products/$id.tsx
@@ -243,7 +179,7 @@ var meta = ({
     description: `yeah ein neues Ziel: "${data.product.name}"`
   };
 };
-var loader2 = async ({ request, params }) => {
+var loader = async ({ request, params }) => {
   let product = await db.product.findFirst({
     where: { id: parseInt(params.id) }
   });
@@ -252,7 +188,7 @@ var loader2 = async ({ request, params }) => {
     throw new Response("Not found.", { status: 404 });
   }
   let data = { product };
-  return (0, import_node2.json)(data, {
+  return (0, import_node.json)(data, {
     headers: {
       "Cache-Control": `public, max-age=${60 * 5}, s-maxage=${60 * 60 * 24}`,
       Vary: "Cookie"
@@ -272,17 +208,11 @@ var action = async ({ request, params }) => {
     });
   }
   console.log(await db.product.delete({ where: { id: parseInt(params.id) } }));
-  return (0, import_node2.redirect)("/products");
+  return (0, import_node.redirect)("/products");
 };
-function ProductsRoute() {
-  const data = (0, import_react9.useLoaderData)();
-  return /* @__PURE__ */ React.createElement(ProductDisplay, {
-    product: data.product
-  });
-}
-function CatchBoundary2() {
-  const caught = (0, import_react9.useCatch)();
-  const params = (0, import_react9.useParams)();
+function CatchBoundary() {
+  const caught = (0, import_react7.useCatch)();
+  const params = (0, import_react7.useParams)();
   switch (caught.status) {
     case 400: {
       return /* @__PURE__ */ React.createElement("div", {
@@ -304,9 +234,9 @@ function CatchBoundary2() {
     }
   }
 }
-function ErrorBoundary2({ error }) {
+function ErrorBoundary({ error }) {
   console.error(error);
-  const { jokeId } = (0, import_react9.useParams)();
+  const { jokeId } = (0, import_react7.useParams)();
   return /* @__PURE__ */ React.createElement("div", {
     className: "error-container"
   }, "There was an error loading product by the id ", jokeId, ". Sorry.");
@@ -315,16 +245,16 @@ function ErrorBoundary2({ error }) {
 // route:/home/john/workspace/moneybox/socket.io/app/routes/products/new.tsx
 var new_exports = {};
 __export(new_exports, {
-  CatchBoundary: () => CatchBoundary3,
-  ErrorBoundary: () => ErrorBoundary3,
+  CatchBoundary: () => CatchBoundary2,
+  ErrorBoundary: () => ErrorBoundary2,
   action: () => action2,
   default: () => NewProductRoute,
-  loader: () => loader3
+  loader: () => loader2
 });
-var import_node3 = require("@remix-run/node");
-var import_react10 = require("@remix-run/react");
-var loader3 = async ({ request }) => {
-  return (0, import_node3.json)({});
+var import_node2 = require("@remix-run/node");
+var import_react8 = require("@remix-run/react");
+var loader2 = async ({ request }) => {
+  return (0, import_node2.json)({});
 };
 var regex = new RegExp("[0-9]");
 function validatePrice(content) {
@@ -337,7 +267,7 @@ function validateName(name) {
     return `Der Name ist zu kurz.`;
   }
 }
-var badRequest = (data) => (0, import_node3.json)(data, { status: 400 });
+var badRequest = (data) => (0, import_node2.json)(data, { status: 400 });
 var action2 = async ({ request }) => {
   const form = await request.formData();
   const name = form.get("name");
@@ -357,22 +287,20 @@ var action2 = async ({ request }) => {
   const product = await db.product.create({
     data: __spreadValues({}, fields)
   });
-  return (0, import_node3.redirect)(`/products`);
+  return (0, import_node2.redirect)(`/`);
 };
 function NewProductRoute() {
   var _a, _b, _c, _d, _e, _f, _g, _h;
-  const actionData = (0, import_react10.useActionData)();
-  const transition = (0, import_react10.useTransition)();
+  const actionData = (0, import_react8.useActionData)();
+  const transition = (0, import_react8.useTransition)();
   if (transition.submission) {
     const name = transition.submission.formData.get("name");
     const price = transition.submission.formData.get("price");
     if (typeof name === "string" && typeof price === "string" && !validatePrice(price) && !validateName(name)) {
-      return /* @__PURE__ */ React.createElement(ProductDisplay, {
-        product: { name, price }
-      });
+      return /* @__PURE__ */ React.createElement("div", null);
     }
   }
-  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", null, "Ein neues Ziel hinzuf\xFCgen"), /* @__PURE__ */ React.createElement(import_react10.Form, {
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", null, "Ein neues Ziel hinzuf\xFCgen"), /* @__PURE__ */ React.createElement(import_react8.Form, {
     method: "post"
   }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", null, "Name:", " ", /* @__PURE__ */ React.createElement("input", {
     type: "text",
@@ -401,18 +329,18 @@ function NewProductRoute() {
     className: "button"
   }, "Hinzuf\xFCgen"))));
 }
-function CatchBoundary3() {
-  const caught = (0, import_react10.useCatch)();
+function CatchBoundary2() {
+  const caught = (0, import_react8.useCatch)();
   if (caught.status === 401) {
     return /* @__PURE__ */ React.createElement("div", {
       className: "error-container"
-    }, /* @__PURE__ */ React.createElement("p", null, "Upps."), /* @__PURE__ */ React.createElement(import_react10.Link, {
+    }, /* @__PURE__ */ React.createElement("p", null, "Upps."), /* @__PURE__ */ React.createElement(import_react8.Link, {
       to: "/login?redirectTo=/jokes/new"
     }, "Login"));
   }
   throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
-function ErrorBoundary3({ error }) {
+function ErrorBoundary2({ error }) {
   console.error(error);
   return /* @__PURE__ */ React.createElement("div", null, "Sorry about that.");
 }
@@ -420,11 +348,11 @@ function ErrorBoundary3({ error }) {
 // route:/home/john/workspace/moneybox/socket.io/app/routes/fetchMoney.tsx
 var fetchMoney_exports = {};
 __export(fetchMoney_exports, {
-  loader: () => loader4
+  loader: () => loader3
 });
-var import_node4 = require("@remix-run/node");
+var import_node3 = require("@remix-run/node");
 var import_fs_extra = __toESM(require("fs-extra"));
-async function loader4() {
+async function loader3() {
   const data = {
     productItems: [
       {
@@ -436,45 +364,53 @@ async function loader4() {
     ],
     money: parseInt(import_fs_extra.default.readFileSync("public/money.txt", "utf8"))
   };
-  return (0, import_node4.json)(data);
+  return (0, import_node3.json)(data);
 }
 
 // route:/home/john/workspace/moneybox/socket.io/app/routes/index.tsx
 var routes_exports = {};
 __export(routes_exports, {
+  action: () => action3,
   default: () => Index,
-  loader: () => loader5
+  loader: () => loader4
 });
-var import_node5 = require("@remix-run/node");
-var import_react11 = require("react");
-var import_react12 = require("@remix-run/react");
-var import_react13 = require("@chakra-ui/react");
+var import_node4 = require("@remix-run/node");
+var import_react9 = require("react");
+var import_react10 = require("@remix-run/react");
+var import_react11 = require("@chakra-ui/react");
 var import_fs_extra2 = __toESM(require("fs-extra"));
-var import_react14 = require("@chakra-ui/react");
-async function loader5() {
+var import_react12 = require("@chakra-ui/react");
+var loader4 = async ({ request, params }) => {
+  const products = await db.product.findMany();
   const data = {
-    productItems: [
-      {
-        id: "0",
-        title: "test",
-        price: "0",
-        image: "/1.jpg"
-      }
-    ],
+    productItems: products,
     money: parseInt(import_fs_extra2.default.readFileSync("public/money.txt", "utf8"))
   };
-  return (0, import_node5.json)(data);
-}
+  return (0, import_node4.json)(data);
+};
+var action3 = async ({ request, params }) => {
+  const form = await request.formData();
+  const deleteId = parseInt(String(form.get("delete")));
+  const product = await db.product.findUnique({
+    where: { id: deleteId }
+  });
+  if (!product) {
+    throw new Response("Man kann nicht l\xF6schen was nicht exestiert", {
+      status: 404
+    });
+  }
+  console.log(await db.product.delete({ where: { id: deleteId } }));
+  return (0, import_node4.redirect)("/");
+};
 function Index() {
-  var _a;
-  const data = (0, import_react12.useLoaderData)();
-  const [money, setMoney] = (0, import_react11.useState)(data.money);
-  const fetcher = (0, import_react12.useFetcher)();
+  const data = (0, import_react10.useLoaderData)();
+  const [money, setMoney] = (0, import_react9.useState)(data.money);
+  const fetcher = (0, import_react10.useFetcher)();
   if (data.money === null || data.money === void 0 || data.money === 0) {
     setMoney(0);
   }
   const socket = useSocket();
-  (0, import_react11.useEffect)(() => {
+  (0, import_react9.useEffect)(() => {
     if (!socket)
       return;
     socket.on("event", (data2) => {
@@ -482,12 +418,11 @@ function Index() {
     });
     socket.emit("event", "ping");
   }, [socket, fetcher]);
-  (0, import_react11.useEffect)(() => {
+  (0, import_react9.useEffect)(() => {
     if (!fetcher.data)
       return;
     setMoney(fetcher.data.money);
   });
-  console.log((_a = fetcher.data) == null ? void 0 : _a.money);
   let price = 2e3;
   let progressvalue = money * 100 / price;
   let missingValue = (price - money) / 100;
@@ -500,36 +435,46 @@ function Index() {
     colorScheme = "orange";
   if (progressvalue >= 100)
     colorScheme = "green";
-  return /* @__PURE__ */ React.createElement(import_react13.Container, null, /* @__PURE__ */ React.createElement(import_react13.VStack, null, /* @__PURE__ */ React.createElement(import_react13.VStack, {
+  console.log("DATA", data);
+  return /* @__PURE__ */ React.createElement(import_react11.Container, null, /* @__PURE__ */ React.createElement(import_react11.VStack, null, /* @__PURE__ */ React.createElement(import_react11.VStack, {
     width: "600px",
     bg: "purple.300"
-  }, /* @__PURE__ */ React.createElement(import_react13.Box, {
+  }, /* @__PURE__ */ React.createElement(import_react11.Box, {
     width: "100px"
   }, /* @__PURE__ */ React.createElement("img", {
     src: "/pig.png"
-  })), /* @__PURE__ */ React.createElement(import_react13.Box, null, /* @__PURE__ */ React.createElement(import_react13.Text, {
+  })), /* @__PURE__ */ React.createElement(import_react11.Box, null, /* @__PURE__ */ React.createElement(import_react11.Text, {
     fontSize: "3xl"
-  }, "Du hast ", /* @__PURE__ */ React.createElement("b", null, money / 100, "\u20AC"), " gespart.", console.log(money)))), /* @__PURE__ */ React.createElement(import_react13.VStack, {
-    width: "600px",
-    bg: "gray.400"
-  }, /* @__PURE__ */ React.createElement(import_react14.HStack, null, /* @__PURE__ */ React.createElement(import_react13.Box, null, /* @__PURE__ */ React.createElement(import_react14.HStack, null, /* @__PURE__ */ React.createElement(import_react13.Box, null, "Es fehlen noch ", /* @__PURE__ */ React.createElement("b", null, missingValue, " \u20AC"), " f\xFCr Schuhe.", /* @__PURE__ */ React.createElement(import_react13.Progress, {
-    value: progressvalue,
-    colorScheme
-  })), /* @__PURE__ */ React.createElement(import_react13.Box, {
-    paddingTop: "20px"
-  }, /* @__PURE__ */ React.createElement(import_react13.Text, {
-    fontSize: "lg"
-  }, price / 100, " \u20AC")))), /* @__PURE__ */ React.createElement(import_react13.Box, {
-    width: "100px"
-  }, /* @__PURE__ */ React.createElement("img", {
-    src: "/schuhe.jpg"
-  })), /* @__PURE__ */ React.createElement("div", {
-    className: "jokes-outlet"
-  }, /* @__PURE__ */ React.createElement(import_react12.Outlet, null))))));
+  }, "Du hast ", /* @__PURE__ */ React.createElement("b", null, money / 100, "\u20AC"), " gespart.", console.log(money)))), data.productItems.map((item, i) => {
+    return /* @__PURE__ */ React.createElement(import_react11.VStack, {
+      width: "600px",
+      bg: "gray.400"
+    }, /* @__PURE__ */ React.createElement(import_react12.HStack, null, /* @__PURE__ */ React.createElement(import_react11.Box, null, /* @__PURE__ */ React.createElement(import_react12.HStack, null, /* @__PURE__ */ React.createElement(import_react11.Box, null, "Es fehlen noch", " ", /* @__PURE__ */ React.createElement("b", null, (parseInt(item.price) - money) / 100, " \u20AC"), " f\xFCr:", /* @__PURE__ */ React.createElement(import_react11.Center, null, /* @__PURE__ */ React.createElement("p", null, item.name)), /* @__PURE__ */ React.createElement(import_react11.Progress, {
+      value: money * 100 / parseInt(item.price),
+      colorScheme
+    })), /* @__PURE__ */ React.createElement(import_react11.Box, {
+      paddingTop: "20px"
+    }, /* @__PURE__ */ React.createElement(import_react11.Text, {
+      fontSize: "lg"
+    }, price / 100, " \u20AC")))), /* @__PURE__ */ React.createElement(import_react11.Box, {
+      width: "100px"
+    }, /* @__PURE__ */ React.createElement("img", {
+      src: "/schuhe.jpg"
+    })), /* @__PURE__ */ React.createElement(import_react10.Form, {
+      method: "delete"
+    }, /* @__PURE__ */ React.createElement("button", {
+      name: "delete",
+      type: "submit",
+      className: "button",
+      value: item.id
+    }, "L\xF6schen"))));
+  }), /* @__PURE__ */ React.createElement(import_react10.Link, {
+    to: "products/new"
+  }, "Neues Ziel Hinzuf\xFCgen")));
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "1363afb9", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-25K3AVFS.js", "imports": ["/build/_shared/chunk-KPLAA3UI.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-BR4ZOMXI.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-FYXQ4A6T.js", "imports": ["/build/_shared/chunk-UTD5JDEY.js", "/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/index": { "id": "routes/products/index", "parentId": "root", "path": "products", "index": true, "caseSensitive": void 0, "module": "/build/routes/products/index-5QTZ2S5O.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-YCU2IMJ5.js", "imports": ["/build/_shared/chunk-UTD5JDEY.js", "/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true } }, "url": "/build/manifest-1363AFB9.js" };
+var assets_manifest_default = { "version": "da73a175", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-LVCTKMJS.js", "imports": ["/build/_shared/chunk-ELPNL5SZ.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-XBFUDUPQ.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-E4Q2NPFD.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true } }, "url": "/build/manifest-DA73A175.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };
@@ -541,14 +486,6 @@ var routes = {
     index: void 0,
     caseSensitive: void 0,
     module: root_exports
-  },
-  "routes/products/index": {
-    id: "routes/products/index",
-    parentId: "root",
-    path: "products",
-    index: true,
-    caseSensitive: void 0,
-    module: products_exports
   },
   "routes/products/$id": {
     id: "routes/products/$id",

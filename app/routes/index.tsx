@@ -1,4 +1,9 @@
-import { json } from "@remix-run/node";
+import {
+  json,
+  LoaderFunction,
+  ActionFunction,
+  redirect,
+} from "@remix-run/node";
 import { useEffect, useRef, useState } from "react";
 import { useSocket } from "~/context";
 import {
@@ -6,37 +11,76 @@ import {
   useFetcher,
   useLoaderData,
   Outlet,
+  Form,
+  Link,
 } from "@remix-run/react";
-import { Box, VStack, Text, Container, Progress } from "@chakra-ui/react";
+import {
+  Box,
+  VStack,
+  Text,
+  Container,
+  Progress,
+  Center,
+} from "@chakra-ui/react";
 import fs from "fs-extra";
 import { HStack } from "@chakra-ui/react";
 //import TTS from 'text-to-speech-offline'
+import { db } from "~/utils/db.server";
+
+type product = {
+  id: number;
+  name: string;
+  price: string;
+  //image: string;
+};
 
 type LoaderData = {
-  productItems: Array<{
-    id: string;
-    title: string;
-    price: string;
-    image: string;
-  }>;
+  productItems: Array<product>;
   money: number;
 };
 
-export async function loader() {
+// export async function loader() {
+//   const data: LoaderData = {
+//     productItems: [
+//       {
+//         id: "0",
+//         title: "test",
+//         price: "0",
+//         image: "/1.jpg",
+//       },
+//     ],
+//     money: parseInt(fs.readFileSync("public/money.txt", "utf8")),
+//   };
+
+//   return json(data);
+// }
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const products = await db.product.findMany();
   const data: LoaderData = {
-    productItems: [
-      {
-        id: "0",
-        title: "test",
-        price: "0",
-        image: "/1.jpg",
-      },
-    ],
+    productItems: products,
     money: parseInt(fs.readFileSync("public/money.txt", "utf8")),
   };
-
+  //const data = { products };
   return json(data);
-}
+};
+
+export const action: ActionFunction = async ({ request, params }) => {
+  const form = await request.formData();
+  const deleteId = parseInt(String(form.get("delete")));
+
+  const product = await db.product.findUnique({
+    where: { id: deleteId },
+  });
+  if (!product) {
+    throw new Response("Man kann nicht löschen was nicht exestiert", {
+      status: 404,
+    });
+  }
+
+  console.log(await db.product.delete({ where: { id: deleteId } }));
+  return redirect("/");
+};
 
 export default function Index() {
   const data = useLoaderData<LoaderData>();
@@ -63,7 +107,7 @@ export default function Index() {
     if (!fetcher.data) return;
     setMoney(fetcher.data.money);
   });
-  console.log(fetcher.data?.money);
+  //console.log(fetcher.data?.money);
 
   let price = 2000;
   let progressvalue = (money * 100) / price;
@@ -80,7 +124,7 @@ export default function Index() {
   //       TTS(say, 'de-DE')
   // }, 500);
   //}
-
+  console.log("DATA", data);
   return (
     <Container>
       <VStack>
@@ -96,28 +140,47 @@ export default function Index() {
             </Text>
           </Box>
         </VStack>
-        <VStack width="600px" bg="gray.400">
-          <HStack>
-            <Box>
+        {data.productItems.map((item: product, i: number) => {
+          return (
+            <VStack width="600px" bg="gray.400">
               <HStack>
                 <Box>
-                  Es fehlen noch <b>{missingValue} €</b> für Schuhe.
-                  <Progress value={progressvalue} colorScheme={colorScheme} />
+                  <HStack>
+                    <Box>
+                      Es fehlen noch{" "}
+                      <b>{(parseInt(item.price) - money) / 100} €</b> für:
+                      <Center>
+                        <p>{item.name}</p>
+                      </Center>
+                      <Progress
+                        value={(money * 100) / parseInt(item.price)}
+                        colorScheme={colorScheme}
+                      />
+                    </Box>
+                    <Box paddingTop="20px">
+                      <Text fontSize="lg">{price / 100} €</Text>
+                    </Box>
+                  </HStack>
                 </Box>
-                <Box paddingTop="20px">
-                  <Text fontSize="lg">{price / 100} €</Text>
-                </Box>
-              </HStack>
-            </Box>
 
-            <Box width="100px">
-              <img src="/schuhe.jpg" />
-            </Box>
-            <div className="jokes-outlet">
-              <Outlet />
-            </div>
-          </HStack>
-        </VStack>
+                <Box width="100px">
+                  <img src="/schuhe.jpg" />
+                </Box>
+                <Form method="delete">
+                  <button
+                    name="delete"
+                    type="submit"
+                    className="button"
+                    value={item.id}
+                  >
+                    Löschen
+                  </button>
+                </Form>
+              </HStack>
+            </VStack>
+          );
+        })}
+        <Link to="products/new">Neues Ziel Hinzufügen</Link>
       </VStack>
     </Container>
   );

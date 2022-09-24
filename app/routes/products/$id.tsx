@@ -8,7 +8,6 @@ import { json, redirect } from "@remix-run/node";
 import { useCatch, useLoaderData, useParams } from "@remix-run/react";
 
 import { db } from "~/utils/db.server";
-import { ProductDisplay } from "~/components/product";
 
 export const meta: MetaFunction = ({
   data,
@@ -64,12 +63,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   console.log(await db.product.delete({ where: { id: parseInt(params.id!) } }));
   return redirect("/products");
 };
-
-export default function ProductsRoute() {
-  const data = useLoaderData<any>();
-
-  return <ProductDisplay product={data.product} />;
-}
 
 export function CatchBoundary() {
   const caught = useCatch();

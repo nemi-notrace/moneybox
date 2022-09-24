@@ -8,7 +8,7 @@ import {
   useTransition,
 } from "@remix-run/react";
 
-import { ProductDisplay } from "~/components/product";
+//import { ProductDisplay } from "~/components/product";
 import { db } from "~/utils/db.server";
 //import { getUserId, requireUserId } from "~/utils/session.server";
 
@@ -73,7 +73,7 @@ export const action: ActionFunction = async ({ request }) => {
   const product = await db.product.create({
     data: { ...fields },
   });
-  return redirect(`/products`);
+  return redirect(`/`);
 };
 
 export default function NewProductRoute() {
@@ -89,7 +89,7 @@ export default function NewProductRoute() {
       !validatePrice(price) &&
       !validateName(name)
     ) {
-      return <ProductDisplay product={{ name, price }} />;
+      return <div></div>;
     }
   }
 

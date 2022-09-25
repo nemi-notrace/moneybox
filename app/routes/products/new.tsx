@@ -15,7 +15,10 @@ import {
 } from "@remix-run/node";
 
 import fs from "fs-extra";
-
+import {
+  unstable_composeUploadHandlers,
+  unstable_createMemoryUploadHandler,
+} from "@remix-run/node";
 export const loader: LoaderFunction = async ({ request }) => {
   return json({});
 };
@@ -23,7 +26,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 const regex = new RegExp("[0-9]+");
 
 function validatePrice(price: string) {
-  if (price.length < 1 || regex.test(price)) {
+  if (price.length < 1 || !regex.test(price)) {
     return `Bitte in cent als numerische Werte eingeben`;
   }
 }
@@ -57,35 +60,51 @@ const badRequest = (data: ActionData) => json(data, { status: 400 });
 // }
 
 export const action: ActionFunction = async ({ request }) => {
-  const form = await request.formData();
-  const name = form.get("name");
-  const price = form.get("price");
-  if (typeof name !== "string" || typeof price !== "string") {
-    return badRequest({ formError: `Form not submitted correctly.` });
-  }
-
-  const uploadHandler = unstable_createFileUploadHandler({
-    directory: "public/${name}",
-    file: ({ filename }) => filename,
-  });
+  //const form = await request.formData();
+  const uploadHandler = unstable_composeUploadHandlers(
+    unstable_createFileUploadHandler({
+      directory: "./public/uploads",
+      file: ({ filename }) => filename,
+    }),
+    unstable_createMemoryUploadHandler()
+  );
 
   const formData = await unstable_parseMultipartFormData(
     request,
     uploadHandler
   );
-
+  const name = formData.get("name");
+  const price = formData.get("price");
+  const img = formData.get("img")?.toString() || "";
+  console.log(typeof name);
+  console.log(typeof price);
+  console.log(typeof img);
+  if (
+    typeof name !== "string" ||
+    typeof price !== "string" ||
+    typeof img !== "string"
+  ) {
+    console.log("1");
+    return badRequest({ formError: `Form not submitted correctly.` });
+  }
   const fieldErrors = {
     name: validateName(name),
     price: validatePrice(price),
+    img: false,
   };
-  const fields = { name, price };
+  console.log("2");
+
+  const fields = { name, price, img };
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
   }
+  console.log("3");
 
   const product = await db.product.create({
     data: { ...fields },
   });
+  console.log("4");
+
   return redirect(`/`);
 };
 
@@ -109,7 +128,7 @@ export default function NewProductRoute() {
   return (
     <div>
       <p>Ein neues Ziel hinzufügen</p>
-      <Form method="post">
+      <Form method="post" encType="multipart/form-data">
         <div>
           <label>
             Name:{" "}
@@ -153,7 +172,7 @@ export default function NewProductRoute() {
             type="file"
             id="img"
             name="img"
-            accept="image/png, image/jpeg"
+            accept="image/png, image/jpg"
           />
         </div>
         <div>

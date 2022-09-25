@@ -140,17 +140,58 @@ function App() {
   }, /* @__PURE__ */ import_react5.default.createElement(import_react4.Outlet, null))), /* @__PURE__ */ import_react5.default.createElement(import_react4.ScrollRestoration, null), /* @__PURE__ */ import_react5.default.createElement(import_react4.Scripts, null), /* @__PURE__ */ import_react5.default.createElement(import_react4.LiveReload, null)));
 }
 
+// route:/home/john/workspace/moneybox/socket.io/app/routes/products/upload.tsx
+var upload_exports = {};
+__export(upload_exports, {
+  action: () => action,
+  default: () => Index
+});
+var import_node = require("@remix-run/node");
+var import_react7 = require("@remix-run/react");
+var action = async ({ request }) => {
+  const uploadHandler = (0, import_node.unstable_composeUploadHandlers)((0, import_node.unstable_createFileUploadHandler)({
+    directory: "./public/uploads",
+    file: ({ filename }) => filename
+  }), (0, import_node.unstable_createMemoryUploadHandler)());
+  const formData = await (0, import_node.unstable_parseMultipartFormData)(request, uploadHandler);
+  const title = formData.get("title");
+  const fileId = formData.get("file");
+  console.log("title: ", title, "file: ", fileId);
+  return (0, import_node.redirect)(``);
+};
+function Index() {
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", null, "Upload Test #2"), /* @__PURE__ */ React.createElement(import_react7.Form, {
+    method: "post",
+    encType: "multipart/form-data"
+  }, /* @__PURE__ */ React.createElement("label", {
+    htmlFor: "title"
+  }, "Title"), /* @__PURE__ */ React.createElement("input", {
+    type: "text",
+    name: "title",
+    id: "title"
+  }), /* @__PURE__ */ React.createElement("label", {
+    htmlFor: "file"
+  }, "File"), /* @__PURE__ */ React.createElement("input", {
+    type: "file",
+    id: "file",
+    name: "file",
+    accept: "application/pdf"
+  }), /* @__PURE__ */ React.createElement("button", {
+    type: "submit"
+  }, "Submit")));
+}
+
 // route:/home/john/workspace/moneybox/socket.io/app/routes/products/$id.tsx
 var id_exports = {};
 __export(id_exports, {
   CatchBoundary: () => CatchBoundary,
   ErrorBoundary: () => ErrorBoundary,
-  action: () => action,
+  action: () => action2,
   loader: () => loader,
   meta: () => meta
 });
-var import_node = require("@remix-run/node");
-var import_react7 = require("@remix-run/react");
+var import_node2 = require("@remix-run/node");
+var import_react8 = require("@remix-run/react");
 
 // app/utils/db.server.ts
 var import_client = require("@prisma/client");
@@ -188,14 +229,14 @@ var loader = async ({ request, params }) => {
     throw new Response("Not found.", { status: 404 });
   }
   let data = { product };
-  return (0, import_node.json)(data, {
+  return (0, import_node2.json)(data, {
     headers: {
       "Cache-Control": `public, max-age=${60 * 5}, s-maxage=${60 * 60 * 24}`,
       Vary: "Cookie"
     }
   });
 };
-var action = async ({ request, params }) => {
+var action2 = async ({ request, params }) => {
   const form = await request.formData();
   console.log(form);
   const product = await db.product.findUnique({
@@ -208,11 +249,11 @@ var action = async ({ request, params }) => {
     });
   }
   console.log(await db.product.delete({ where: { id: parseInt(params.id) } }));
-  return (0, import_node.redirect)("/");
+  return (0, import_node2.redirect)("/");
 };
 function CatchBoundary() {
-  const caught = (0, import_react7.useCatch)();
-  const params = (0, import_react7.useParams)();
+  const caught = (0, import_react8.useCatch)();
+  const params = (0, import_react8.useParams)();
   switch (caught.status) {
     case 400: {
       return /* @__PURE__ */ React.createElement("div", {
@@ -236,7 +277,7 @@ function CatchBoundary() {
 }
 function ErrorBoundary({ error }) {
   console.error(error);
-  const { jokeId } = (0, import_react7.useParams)();
+  const { jokeId } = (0, import_react8.useParams)();
   return /* @__PURE__ */ React.createElement("div", {
     className: "error-container"
   }, "There was an error loading product by the id ", jokeId, ". Sorry.");
@@ -247,19 +288,20 @@ var new_exports = {};
 __export(new_exports, {
   CatchBoundary: () => CatchBoundary2,
   ErrorBoundary: () => ErrorBoundary2,
-  action: () => action2,
+  action: () => action3,
   default: () => NewProductRoute,
   loader: () => loader2
 });
-var import_node2 = require("@remix-run/node");
-var import_react8 = require("@remix-run/react");
 var import_node3 = require("@remix-run/node");
+var import_react9 = require("@remix-run/react");
+var import_node4 = require("@remix-run/node");
+var import_node5 = require("@remix-run/node");
 var loader2 = async ({ request }) => {
-  return (0, import_node2.json)({});
+  return (0, import_node3.json)({});
 };
 var regex = new RegExp("[0-9]+");
 function validatePrice(price) {
-  if (price.length < 1 || regex.test(price)) {
+  if (price.length < 1 || !regex.test(price)) {
     return `Bitte in cent als numerische Werte eingeben`;
   }
 }
@@ -268,36 +310,45 @@ function validateName(name) {
     return `Der Name ist zu kurz.`;
   }
 }
-var badRequest = (data) => (0, import_node2.json)(data, { status: 400 });
-var action2 = async ({ request }) => {
-  const form = await request.formData();
-  const name = form.get("name");
-  const price = form.get("price");
-  if (typeof name !== "string" || typeof price !== "string") {
+var badRequest = (data) => (0, import_node3.json)(data, { status: 400 });
+var action3 = async ({ request }) => {
+  var _a;
+  const uploadHandler = (0, import_node5.unstable_composeUploadHandlers)((0, import_node4.unstable_createFileUploadHandler)({
+    directory: "./public/uploads",
+    file: ({ filename }) => filename
+  }), (0, import_node5.unstable_createMemoryUploadHandler)());
+  const formData = await (0, import_node4.unstable_parseMultipartFormData)(request, uploadHandler);
+  const name = formData.get("name");
+  const price = formData.get("price");
+  const img = ((_a = formData.get("img")) == null ? void 0 : _a.toString()) || "";
+  console.log(typeof name);
+  console.log(typeof price);
+  console.log(typeof img);
+  if (typeof name !== "string" || typeof price !== "string" || typeof img !== "string") {
+    console.log("1");
     return badRequest({ formError: `Form not submitted correctly.` });
   }
-  const uploadHandler = (0, import_node3.unstable_createFileUploadHandler)({
-    directory: "public/${name}",
-    file: ({ filename }) => filename
-  });
-  const formData = await (0, import_node3.unstable_parseMultipartFormData)(request, uploadHandler);
   const fieldErrors = {
     name: validateName(name),
-    price: validatePrice(price)
+    price: validatePrice(price),
+    img: false
   };
-  const fields = { name, price };
+  console.log("2");
+  const fields = { name, price, img };
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
   }
+  console.log("3");
   const product = await db.product.create({
     data: __spreadValues({}, fields)
   });
-  return (0, import_node2.redirect)(`/`);
+  console.log("4");
+  return (0, import_node3.redirect)(`/`);
 };
 function NewProductRoute() {
   var _a, _b, _c, _d, _e, _f, _g, _h;
-  const actionData = (0, import_react8.useActionData)();
-  const transition = (0, import_react8.useTransition)();
+  const actionData = (0, import_react9.useActionData)();
+  const transition = (0, import_react9.useTransition)();
   if (transition.submission) {
     const name = transition.submission.formData.get("name");
     const price = transition.submission.formData.get("price");
@@ -305,8 +356,9 @@ function NewProductRoute() {
       return /* @__PURE__ */ React.createElement("div", null);
     }
   }
-  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", null, "Ein neues Ziel hinzuf\xFCgen"), /* @__PURE__ */ React.createElement(import_react8.Form, {
-    method: "post"
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", null, "Ein neues Ziel hinzuf\xFCgen"), /* @__PURE__ */ React.createElement(import_react9.Form, {
+    method: "post",
+    encType: "multipart/form-data"
   }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", null, "Name:", " ", /* @__PURE__ */ React.createElement("input", {
     type: "text",
     defaultValue: (_a = actionData == null ? void 0 : actionData.fields) == null ? void 0 : _a.name,
@@ -326,11 +378,11 @@ function NewProductRoute() {
     className: "form-validation-error",
     role: "alert",
     id: "price-error"
-  }, actionData.fieldErrors.price) : null), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("input", {
+  }, actionData.fieldErrors.price) : null), /* @__PURE__ */ React.createElement("div", null, "Bild hinzuf\xFCgen", /* @__PURE__ */ React.createElement("input", {
     type: "file",
-    id: "avatar",
-    name: "avatar",
-    accept: "image/png, image/jpeg"
+    id: "img",
+    name: "img",
+    accept: "image/png, image/jpg"
   })), /* @__PURE__ */ React.createElement("div", null, (actionData == null ? void 0 : actionData.formError) ? /* @__PURE__ */ React.createElement("p", {
     className: "form-validation-error",
     role: "alert"
@@ -340,7 +392,7 @@ function NewProductRoute() {
   }, "Hinzuf\xFCgen"))));
 }
 function CatchBoundary2() {
-  const caught = (0, import_react8.useCatch)();
+  const caught = (0, import_react9.useCatch)();
   throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
 function ErrorBoundary2({ error }) {
@@ -353,7 +405,7 @@ var fetchMoney_exports = {};
 __export(fetchMoney_exports, {
   loader: () => loader3
 });
-var import_node4 = require("@remix-run/node");
+var import_node6 = require("@remix-run/node");
 var import_fs_extra = __toESM(require("fs-extra"));
 async function loader3() {
   const data = {
@@ -367,31 +419,31 @@ async function loader3() {
     ],
     money: parseInt(import_fs_extra.default.readFileSync("public/money.txt", "utf8"))
   };
-  return (0, import_node4.json)(data);
+  return (0, import_node6.json)(data);
 }
 
 // route:/home/john/workspace/moneybox/socket.io/app/routes/index.tsx
 var routes_exports = {};
 __export(routes_exports, {
-  action: () => action3,
-  default: () => Index,
+  action: () => action4,
+  default: () => Index2,
   loader: () => loader4
 });
-var import_node5 = require("@remix-run/node");
-var import_react9 = require("react");
-var import_react10 = require("@remix-run/react");
-var import_react11 = require("@chakra-ui/react");
-var import_fs_extra2 = __toESM(require("fs-extra"));
+var import_node7 = require("@remix-run/node");
+var import_react10 = require("react");
+var import_react11 = require("@remix-run/react");
 var import_react12 = require("@chakra-ui/react");
+var import_fs_extra2 = __toESM(require("fs-extra"));
+var import_react13 = require("@chakra-ui/react");
 var loader4 = async ({ request, params }) => {
   const products = await db.product.findMany();
   const data = {
     productItems: products,
     money: parseInt(import_fs_extra2.default.readFileSync("public/money.txt", "utf8"))
   };
-  return (0, import_node5.json)(data);
+  return (0, import_node7.json)(data);
 };
-var action3 = async ({ request, params }) => {
+var action4 = async ({ request, params }) => {
   const form = await request.formData();
   const deleteId = parseInt(String(form.get("delete")));
   const product = await db.product.findUnique({
@@ -403,17 +455,17 @@ var action3 = async ({ request, params }) => {
     });
   }
   console.log(await db.product.delete({ where: { id: deleteId } }));
-  return (0, import_node5.redirect)("/");
+  return (0, import_node7.redirect)("/");
 };
-function Index() {
-  const data = (0, import_react10.useLoaderData)();
-  const [money, setMoney] = (0, import_react9.useState)(data.money);
-  const fetcher = (0, import_react10.useFetcher)();
+function Index2() {
+  const data = (0, import_react11.useLoaderData)();
+  const [money, setMoney] = (0, import_react10.useState)(data.money);
+  const fetcher = (0, import_react11.useFetcher)();
   if (data.money === null || data.money === void 0 || data.money === 0) {
     setMoney(0);
   }
   const socket = useSocket();
-  (0, import_react9.useEffect)(() => {
+  (0, import_react10.useEffect)(() => {
     if (!socket)
       return;
     socket.on("event", (data2) => {
@@ -421,7 +473,7 @@ function Index() {
     });
     socket.emit("event", "ping");
   }, [socket, fetcher]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react10.useEffect)(() => {
     if (!fetcher.data)
       return;
     setMoney(fetcher.data.money);
@@ -438,32 +490,32 @@ function Index() {
     colorScheme = "orange";
   if (progressvalue >= 100)
     colorScheme = "green";
-  console.log("DATA", data);
-  return /* @__PURE__ */ React.createElement(import_react11.Container, null, /* @__PURE__ */ React.createElement(import_react11.VStack, null, /* @__PURE__ */ React.createElement(import_react11.VStack, {
+  console.log("DATA");
+  return /* @__PURE__ */ React.createElement(import_react12.Container, null, /* @__PURE__ */ React.createElement(import_react12.VStack, null, /* @__PURE__ */ React.createElement(import_react12.VStack, {
     width: "600px",
     bg: "purple.300"
-  }, /* @__PURE__ */ React.createElement(import_react11.Box, {
+  }, /* @__PURE__ */ React.createElement(import_react12.Box, {
     width: "100px"
   }, /* @__PURE__ */ React.createElement("img", {
     src: "/pig.png"
-  })), /* @__PURE__ */ React.createElement(import_react11.Box, null, /* @__PURE__ */ React.createElement(import_react11.Text, {
+  })), /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react12.Text, {
     fontSize: "3xl"
   }, "Du hast ", /* @__PURE__ */ React.createElement("b", null, money / 100, "\u20AC"), " gespart.", console.log(money)))), data.productItems.map((item, i) => {
-    return /* @__PURE__ */ React.createElement(import_react11.VStack, {
+    return /* @__PURE__ */ React.createElement(import_react12.VStack, {
       width: "600px",
       bg: "gray.400"
-    }, /* @__PURE__ */ React.createElement(import_react12.HStack, null, /* @__PURE__ */ React.createElement(import_react11.Box, null, /* @__PURE__ */ React.createElement(import_react12.HStack, null, /* @__PURE__ */ React.createElement(import_react11.Box, null, "Es fehlen noch", " ", /* @__PURE__ */ React.createElement("b", null, (parseInt(item.price) - money) / 100, " \u20AC"), " f\xFCr:", /* @__PURE__ */ React.createElement(import_react11.Center, null, /* @__PURE__ */ React.createElement("p", null, item.name)), /* @__PURE__ */ React.createElement(import_react11.Progress, {
+    }, /* @__PURE__ */ React.createElement(import_react13.HStack, null, /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react13.HStack, null, /* @__PURE__ */ React.createElement(import_react12.Box, null, "Es fehlen noch", " ", /* @__PURE__ */ React.createElement("b", null, (parseInt(item.price) - money) / 100, " \u20AC"), " f\xFCr:", /* @__PURE__ */ React.createElement(import_react12.Center, null, /* @__PURE__ */ React.createElement("p", null, item.name)), /* @__PURE__ */ React.createElement(import_react12.Progress, {
       value: money * 100 / parseInt(item.price),
       colorScheme
-    })), /* @__PURE__ */ React.createElement(import_react11.Box, {
+    })), /* @__PURE__ */ React.createElement(import_react12.Box, {
       paddingTop: "20px"
-    }, /* @__PURE__ */ React.createElement(import_react11.Text, {
+    }, /* @__PURE__ */ React.createElement(import_react12.Text, {
       fontSize: "lg"
-    }, price / 100, " \u20AC")))), /* @__PURE__ */ React.createElement(import_react11.Box, {
+    }, price / 100, " \u20AC")))), /* @__PURE__ */ React.createElement(import_react12.Box, {
       width: "100px"
     }, /* @__PURE__ */ React.createElement("img", {
       src: "/schuhe.jpg"
-    })), /* @__PURE__ */ React.createElement(import_react10.Form, {
+    })), /* @__PURE__ */ React.createElement(import_react11.Form, {
       method: "delete"
     }, /* @__PURE__ */ React.createElement("button", {
       name: "delete",
@@ -471,13 +523,13 @@ function Index() {
       className: "button",
       value: item.id
     }, "L\xF6schen"))));
-  }), /* @__PURE__ */ React.createElement(import_react10.Link, {
+  }), /* @__PURE__ */ React.createElement(import_react11.Link, {
     to: "products/new"
   }, "Neues Ziel Hinzuf\xFCgen")));
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "4f405d9d", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-LVCTKMJS.js", "imports": ["/build/_shared/chunk-ELPNL5SZ.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-XBFUDUPQ.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-5Q3V4C3C.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true } }, "url": "/build/manifest-4F405D9D.js" };
+var assets_manifest_default = { "version": "e3b33e0c", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-LVCTKMJS.js", "imports": ["/build/_shared/chunk-ELPNL5SZ.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-VLKG62T6.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-JKZBXIAS.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/upload": { "id": "routes/products/upload", "parentId": "root", "path": "products/upload", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/upload-GQB7JHMP.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-E3B33E0C.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };
@@ -489,6 +541,14 @@ var routes = {
     index: void 0,
     caseSensitive: void 0,
     module: root_exports
+  },
+  "routes/products/upload": {
+    id: "routes/products/upload",
+    parentId: "root",
+    path: "products/upload",
+    index: void 0,
+    caseSensitive: void 0,
+    module: upload_exports
   },
   "routes/products/$id": {
     id: "routes/products/$id",

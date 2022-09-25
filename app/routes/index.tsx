@@ -85,7 +85,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function Index() {
   const data = useLoaderData<LoaderData>();
   const [money, setMoney] = useState(data.money);
-
   const fetcher = useFetcher();
   if (data.money === null || data.money === undefined || data.money === 0) {
     setMoney(0);
@@ -124,7 +123,7 @@ export default function Index() {
   //       TTS(say, 'de-DE')
   // }, 500);
   //}
-  console.log("DATA", data);
+  console.log("DATA");
   return (
     <Container>
       <VStack>

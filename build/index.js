@@ -208,7 +208,7 @@ var action = async ({ request, params }) => {
     });
   }
   console.log(await db.product.delete({ where: { id: parseInt(params.id) } }));
-  return (0, import_node.redirect)("/products");
+  return (0, import_node.redirect)("/");
 };
 function CatchBoundary() {
   const caught = (0, import_react7.useCatch)();
@@ -253,12 +253,13 @@ __export(new_exports, {
 });
 var import_node2 = require("@remix-run/node");
 var import_react8 = require("@remix-run/react");
+var import_node3 = require("@remix-run/node");
 var loader2 = async ({ request }) => {
   return (0, import_node2.json)({});
 };
-var regex = new RegExp("[0-9]");
-function validatePrice(content) {
-  if (content.length < 1 && regex.test(content)) {
+var regex = new RegExp("[0-9]+");
+function validatePrice(price) {
+  if (price.length < 1 || regex.test(price)) {
     return `Bitte in cent als numerische Werte eingeben`;
   }
 }
@@ -272,10 +273,14 @@ var action2 = async ({ request }) => {
   const form = await request.formData();
   const name = form.get("name");
   const price = form.get("price");
-  console.log(price);
   if (typeof name !== "string" || typeof price !== "string") {
     return badRequest({ formError: `Form not submitted correctly.` });
   }
+  const uploadHandler = (0, import_node3.unstable_createFileUploadHandler)({
+    directory: "public/${name}",
+    file: ({ filename }) => filename
+  });
+  const formData = await (0, import_node3.unstable_parseMultipartFormData)(request, uploadHandler);
   const fieldErrors = {
     name: validateName(name),
     price: validatePrice(price)
@@ -321,7 +326,12 @@ function NewProductRoute() {
     className: "form-validation-error",
     role: "alert",
     id: "price-error"
-  }, actionData.fieldErrors.price) : null), /* @__PURE__ */ React.createElement("div", null, (actionData == null ? void 0 : actionData.formError) ? /* @__PURE__ */ React.createElement("p", {
+  }, actionData.fieldErrors.price) : null), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("input", {
+    type: "file",
+    id: "avatar",
+    name: "avatar",
+    accept: "image/png, image/jpeg"
+  })), /* @__PURE__ */ React.createElement("div", null, (actionData == null ? void 0 : actionData.formError) ? /* @__PURE__ */ React.createElement("p", {
     className: "form-validation-error",
     role: "alert"
   }, actionData.formError) : null, /* @__PURE__ */ React.createElement("button", {
@@ -331,13 +341,6 @@ function NewProductRoute() {
 }
 function CatchBoundary2() {
   const caught = (0, import_react8.useCatch)();
-  if (caught.status === 401) {
-    return /* @__PURE__ */ React.createElement("div", {
-      className: "error-container"
-    }, /* @__PURE__ */ React.createElement("p", null, "Upps."), /* @__PURE__ */ React.createElement(import_react8.Link, {
-      to: "/login?redirectTo=/jokes/new"
-    }, "Login"));
-  }
   throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
 function ErrorBoundary2({ error }) {
@@ -350,7 +353,7 @@ var fetchMoney_exports = {};
 __export(fetchMoney_exports, {
   loader: () => loader3
 });
-var import_node3 = require("@remix-run/node");
+var import_node4 = require("@remix-run/node");
 var import_fs_extra = __toESM(require("fs-extra"));
 async function loader3() {
   const data = {
@@ -364,7 +367,7 @@ async function loader3() {
     ],
     money: parseInt(import_fs_extra.default.readFileSync("public/money.txt", "utf8"))
   };
-  return (0, import_node3.json)(data);
+  return (0, import_node4.json)(data);
 }
 
 // route:/home/john/workspace/moneybox/socket.io/app/routes/index.tsx
@@ -374,7 +377,7 @@ __export(routes_exports, {
   default: () => Index,
   loader: () => loader4
 });
-var import_node4 = require("@remix-run/node");
+var import_node5 = require("@remix-run/node");
 var import_react9 = require("react");
 var import_react10 = require("@remix-run/react");
 var import_react11 = require("@chakra-ui/react");
@@ -386,7 +389,7 @@ var loader4 = async ({ request, params }) => {
     productItems: products,
     money: parseInt(import_fs_extra2.default.readFileSync("public/money.txt", "utf8"))
   };
-  return (0, import_node4.json)(data);
+  return (0, import_node5.json)(data);
 };
 var action3 = async ({ request, params }) => {
   const form = await request.formData();
@@ -400,7 +403,7 @@ var action3 = async ({ request, params }) => {
     });
   }
   console.log(await db.product.delete({ where: { id: deleteId } }));
-  return (0, import_node4.redirect)("/");
+  return (0, import_node5.redirect)("/");
 };
 function Index() {
   const data = (0, import_react10.useLoaderData)();
@@ -474,7 +477,7 @@ function Index() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "da73a175", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-LVCTKMJS.js", "imports": ["/build/_shared/chunk-ELPNL5SZ.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-XBFUDUPQ.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-E4Q2NPFD.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true } }, "url": "/build/manifest-DA73A175.js" };
+var assets_manifest_default = { "version": "4f405d9d", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-LVCTKMJS.js", "imports": ["/build/_shared/chunk-ELPNL5SZ.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-XBFUDUPQ.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-5Q3V4C3C.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true } }, "url": "/build/manifest-4F405D9D.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };

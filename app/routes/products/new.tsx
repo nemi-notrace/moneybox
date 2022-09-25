@@ -8,22 +8,22 @@ import {
   useTransition,
 } from "@remix-run/react";
 
-//import { ProductDisplay } from "~/components/product";
 import { db } from "~/utils/db.server";
-//import { getUserId, requireUserId } from "~/utils/session.server";
+import {
+  unstable_createFileUploadHandler,
+  unstable_parseMultipartFormData,
+} from "@remix-run/node";
+
+import fs from "fs-extra";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // const userId = await getUserId(request);
-  //   if (!userId) {
-  //     throw new Response("Unauthorized", { status: 401 });
-  //   }
   return json({});
 };
 
-const regex = new RegExp("[0-9]");
+const regex = new RegExp("[0-9]+");
 
-function validatePrice(content: string) {
-  if (content.length < 1 && regex.test(content)) {
+function validatePrice(price: string) {
+  if (price.length < 1 || regex.test(price)) {
     return `Bitte in cent als numerische Werte eingeben`;
   }
 }
@@ -40,26 +40,39 @@ type ActionData = {
   fields?: {
     name: string;
     price: string;
+    img: string;
   };
 };
 
-/**
- * This helper function gives us typechecking for our ActionData return
- * statements, while still returning the accurate HTTP status, 400 Bad Request,
- * to the client.
- */
 const badRequest = (data: ActionData) => json(data, { status: 400 });
 
-export const action: ActionFunction = async ({ request }) => {
-  // const userId = await requireUserId(request);
+// export async function uploadImg(request: Request){
+//   const form = await unstable_parseMultipartFormData(
+//     request,
+//     uploadHandler
+//   )
 
+//   const file = formData.get("img")?toString() || ""
+//   return file
+// }
+
+export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const name = form.get("name");
   const price = form.get("price");
-  console.log(price);
   if (typeof name !== "string" || typeof price !== "string") {
     return badRequest({ formError: `Form not submitted correctly.` });
   }
+
+  const uploadHandler = unstable_createFileUploadHandler({
+    directory: "public/${name}",
+    file: ({ filename }) => filename,
+  });
+
+  const formData = await unstable_parseMultipartFormData(
+    request,
+    uploadHandler
+  );
 
   const fieldErrors = {
     name: validateName(name),
@@ -135,6 +148,15 @@ export default function NewProductRoute() {
           ) : null}
         </div>
         <div>
+          Bild hinzufügen
+          <input
+            type="file"
+            id="img"
+            name="img"
+            accept="image/png, image/jpeg"
+          />
+        </div>
+        <div>
           {actionData?.formError ? (
             <p className="form-validation-error" role="alert">
               {actionData.formError}
@@ -151,16 +173,6 @@ export default function NewProductRoute() {
 
 export function CatchBoundary() {
   const caught = useCatch();
-
-  if (caught.status === 401) {
-    return (
-      <div className="error-container">
-        <p>Upps.</p>
-        <Link to="/login?redirectTo=/jokes/new">Login</Link>
-      </div>
-    );
-  }
-
   throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
 

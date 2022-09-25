@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   console.log(await db.product.delete({ where: { id: parseInt(params.id!) } }));
-  return redirect("/products");
+  return redirect("/");
 };
 
 export function CatchBoundary() {

@@ -75,10 +75,11 @@ export const action: ActionFunction = async ({ request }) => {
   );
   const name = formData.get("name");
   const price = formData.get("price");
-  const img = formData.get("img")?.toString() || "";
+  const img = JSON.parse(JSON.stringify(formData.get("img"))).name || "";
   console.log(typeof name);
   console.log(typeof price);
-  console.log(typeof img);
+  console.log();
+
   if (
     typeof name !== "string" ||
     typeof price !== "string" ||

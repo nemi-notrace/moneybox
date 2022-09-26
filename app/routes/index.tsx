@@ -31,7 +31,7 @@ type product = {
   id: number;
   name: string;
   price: string;
-  //image: string;
+  img: string;
 };
 
 type LoaderData = {
@@ -57,6 +57,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const products = await db.product.findMany();
+  console.log("Products", products);
   const data: LoaderData = {
     productItems: products,
     money: parseInt(fs.readFileSync("public/money.txt", "utf8")),
@@ -123,7 +124,6 @@ export default function Index() {
   //       TTS(say, 'de-DE')
   // }, 500);
   //}
-  console.log("DATA");
   return (
     <Container>
       <VStack>
@@ -140,6 +140,7 @@ export default function Index() {
           </Box>
         </VStack>
         {data.productItems.map((item: product, i: number) => {
+          console.log(item.name);
           return (
             <VStack width="600px" bg="gray.400">
               <HStack>
@@ -163,7 +164,7 @@ export default function Index() {
                 </Box>
 
                 <Box width="100px">
-                  <img src="/schuhe.jpg" />
+                  <img src={`uploads/${item.img}`} />
                 </Box>
                 <Form method="delete">
                   <button

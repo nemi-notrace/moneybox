@@ -312,7 +312,6 @@ function validateName(name) {
 }
 var badRequest = (data) => (0, import_node3.json)(data, { status: 400 });
 var action3 = async ({ request }) => {
-  var _a;
   const uploadHandler = (0, import_node5.unstable_composeUploadHandlers)((0, import_node4.unstable_createFileUploadHandler)({
     directory: "./public/uploads",
     file: ({ filename }) => filename
@@ -320,10 +319,10 @@ var action3 = async ({ request }) => {
   const formData = await (0, import_node4.unstable_parseMultipartFormData)(request, uploadHandler);
   const name = formData.get("name");
   const price = formData.get("price");
-  const img = ((_a = formData.get("img")) == null ? void 0 : _a.toString()) || "";
+  const img = JSON.parse(JSON.stringify(formData.get("img"))).name || "";
   console.log(typeof name);
   console.log(typeof price);
-  console.log(typeof img);
+  console.log();
   if (typeof name !== "string" || typeof price !== "string" || typeof img !== "string") {
     console.log("1");
     return badRequest({ formError: `Form not submitted correctly.` });
@@ -437,6 +436,7 @@ var import_fs_extra2 = __toESM(require("fs-extra"));
 var import_react13 = require("@chakra-ui/react");
 var loader4 = async ({ request, params }) => {
   const products = await db.product.findMany();
+  console.log("Products", products);
   const data = {
     productItems: products,
     money: parseInt(import_fs_extra2.default.readFileSync("public/money.txt", "utf8"))
@@ -490,7 +490,6 @@ function Index2() {
     colorScheme = "orange";
   if (progressvalue >= 100)
     colorScheme = "green";
-  console.log("DATA");
   return /* @__PURE__ */ React.createElement(import_react12.Container, null, /* @__PURE__ */ React.createElement(import_react12.VStack, null, /* @__PURE__ */ React.createElement(import_react12.VStack, {
     width: "600px",
     bg: "purple.300"
@@ -501,6 +500,7 @@ function Index2() {
   })), /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react12.Text, {
     fontSize: "3xl"
   }, "Du hast ", /* @__PURE__ */ React.createElement("b", null, money / 100, "\u20AC"), " gespart.", console.log(money)))), data.productItems.map((item, i) => {
+    console.log(item.name);
     return /* @__PURE__ */ React.createElement(import_react12.VStack, {
       width: "600px",
       bg: "gray.400"
@@ -514,7 +514,7 @@ function Index2() {
     }, price / 100, " \u20AC")))), /* @__PURE__ */ React.createElement(import_react12.Box, {
       width: "100px"
     }, /* @__PURE__ */ React.createElement("img", {
-      src: "/schuhe.jpg"
+      src: `uploads/${item.img}`
     })), /* @__PURE__ */ React.createElement(import_react11.Form, {
       method: "delete"
     }, /* @__PURE__ */ React.createElement("button", {
@@ -529,7 +529,7 @@ function Index2() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "e3b33e0c", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-LVCTKMJS.js", "imports": ["/build/_shared/chunk-ELPNL5SZ.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-VLKG62T6.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-JKZBXIAS.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/upload": { "id": "routes/products/upload", "parentId": "root", "path": "products/upload", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/upload-GQB7JHMP.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-E3B33E0C.js" };
+var assets_manifest_default = { "version": "53fe18e9", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-LVCTKMJS.js", "imports": ["/build/_shared/chunk-ELPNL5SZ.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-23FI3SLZ.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-T66NDB7D.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/upload": { "id": "routes/products/upload", "parentId": "root", "path": "products/upload", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/upload-GQB7JHMP.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-53FE18E9.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };

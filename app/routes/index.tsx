@@ -21,6 +21,7 @@ import {
   Container,
   Progress,
   Center,
+  Image,
 } from "@chakra-ui/react";
 import fs from "fs-extra";
 import { HStack } from "@chakra-ui/react";
@@ -109,14 +110,6 @@ export default function Index() {
   });
   //console.log(fetcher.data?.money);
 
-  let price = 2000;
-  let progressvalue = (money * 100) / price;
-  let missingValue = (price - money) / 100;
-  if (price < money) missingValue = 0;
-  let colorScheme = "red";
-  if (progressvalue == price) progressvalue = price;
-  if (progressvalue < 99) colorScheme = "orange";
-  if (progressvalue >= 100) colorScheme = "green";
   //   if (typeof document === "undefined") {
   //       console.log("not on browser")} else {
   //       setTimeout(function(){
@@ -140,45 +133,86 @@ export default function Index() {
           </Box>
         </VStack>
         {data.productItems.map((item: product, i: number) => {
-          console.log(item.name);
-          return (
-            <VStack width="600px" bg="gray.400">
-              <HStack>
-                <Box>
-                  <HStack>
-                    <Box>
-                      Es fehlen noch{" "}
-                      <b>{(parseInt(item.price) - money) / 100} €</b> für:
-                      <Center>
-                        <p>{item.name}</p>
-                      </Center>
-                      <Progress
-                        value={(money * 100) / parseInt(item.price)}
-                        colorScheme={colorScheme}
-                      />
-                    </Box>
-                    <Box paddingTop="20px">
-                      <Text fontSize="lg">{price / 100} €</Text>
-                    </Box>
-                  </HStack>
-                </Box>
+          const price = parseInt(item.price);
+          const missing = (parseInt(item.price) - money) / 100;
+          let progressvalue = (money * 100) / price;
+          let colorScheme = "red";
+          if (progressvalue == price) progressvalue = price;
+          if (progressvalue < 99) colorScheme = "orange";
+          if (progressvalue >= 100) colorScheme = "green";
+          if (missing > 0) {
+            return (
+              <VStack width="600px" bg="gray.400">
+                <HStack>
+                  <Box>
+                    <Text>
+                      Es fehlen noch <b>{missing} €</b> für {item.name}
+                    </Text>
 
-                <Box width="100px">
-                  <img src={`uploads/${item.img}`} />
-                </Box>
-                <Form method="delete">
-                  <button
-                    name="delete"
-                    type="submit"
-                    className="button"
-                    value={item.id}
-                  >
-                    Löschen
-                  </button>
-                </Form>
-              </HStack>
-            </VStack>
-          );
+                    <Progress
+                      value={(money * 100) / parseInt(item.price)}
+                      colorScheme={colorScheme}
+                      width="300px"
+                    />
+                  </Box>
+                  <Box width="50px" paddingTop="20px">
+                    {parseInt(item.price) / 100} €
+                  </Box>
+                  <Image
+                    boxSize="100px"
+                    objectFit="cover"
+                    src={`uploads/${item.img}`}
+                    alt="Produktbild"
+                  />
+                  <Form method="delete">
+                    <button
+                      name="delete"
+                      type="submit"
+                      className="button"
+                      value={item.id}
+                    >
+                      Löschen
+                    </button>
+                  </Form>
+                </HStack>
+              </VStack>
+            );
+          } else {
+            return (
+              <VStack width="600px" bg="gray.400">
+                <HStack>
+                  <Box>
+                    <Text>Du kannst dir {item.name} kaufen</Text>
+
+                    <Progress
+                      value={(money * 100) / parseInt(item.price)}
+                      colorScheme={colorScheme}
+                      width="300px"
+                    />
+                  </Box>
+                  <Box width="50px" paddingTop="20px">
+                    {parseInt(item.price) / 100} €
+                  </Box>
+                  <Image
+                    boxSize="100px"
+                    objectFit="cover"
+                    src={`uploads/${item.img}`}
+                    alt="Produktbild"
+                  />
+                  <Form method="delete">
+                    <button
+                      name="delete"
+                      type="submit"
+                      className="button"
+                      value={item.id}
+                    >
+                      Löschen
+                    </button>
+                  </Form>
+                </HStack>
+              </VStack>
+            );
+          }
         })}
         <Link to="products/new">Neues Ziel Hinzufügen</Link>
       </VStack>

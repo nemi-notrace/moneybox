@@ -478,18 +478,6 @@ function Index2() {
       return;
     setMoney(fetcher.data.money);
   });
-  let price = 2e3;
-  let progressvalue = money * 100 / price;
-  let missingValue = (price - money) / 100;
-  if (price < money)
-    missingValue = 0;
-  let colorScheme = "red";
-  if (progressvalue == price)
-    progressvalue = price;
-  if (progressvalue < 99)
-    colorScheme = "orange";
-  if (progressvalue >= 100)
-    colorScheme = "green";
   return /* @__PURE__ */ React.createElement(import_react12.Container, null, /* @__PURE__ */ React.createElement(import_react12.VStack, null, /* @__PURE__ */ React.createElement(import_react12.VStack, {
     width: "600px",
     bg: "purple.300"
@@ -500,36 +488,72 @@ function Index2() {
   })), /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react12.Text, {
     fontSize: "3xl"
   }, "Du hast ", /* @__PURE__ */ React.createElement("b", null, money / 100, "\u20AC"), " gespart.", console.log(money)))), data.productItems.map((item, i) => {
-    console.log(item.name);
-    return /* @__PURE__ */ React.createElement(import_react12.VStack, {
-      width: "600px",
-      bg: "gray.400"
-    }, /* @__PURE__ */ React.createElement(import_react13.HStack, null, /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react13.HStack, null, /* @__PURE__ */ React.createElement(import_react12.Box, null, "Es fehlen noch", " ", /* @__PURE__ */ React.createElement("b", null, (parseInt(item.price) - money) / 100, " \u20AC"), " f\xFCr:", /* @__PURE__ */ React.createElement(import_react12.Center, null, /* @__PURE__ */ React.createElement("p", null, item.name)), /* @__PURE__ */ React.createElement(import_react12.Progress, {
-      value: money * 100 / parseInt(item.price),
-      colorScheme
-    })), /* @__PURE__ */ React.createElement(import_react12.Box, {
-      paddingTop: "20px"
-    }, /* @__PURE__ */ React.createElement(import_react12.Text, {
-      fontSize: "lg"
-    }, price / 100, " \u20AC")))), /* @__PURE__ */ React.createElement(import_react12.Box, {
-      width: "100px"
-    }, /* @__PURE__ */ React.createElement("img", {
-      src: `uploads/${item.img}`
-    })), /* @__PURE__ */ React.createElement(import_react11.Form, {
-      method: "delete"
-    }, /* @__PURE__ */ React.createElement("button", {
-      name: "delete",
-      type: "submit",
-      className: "button",
-      value: item.id
-    }, "L\xF6schen"))));
+    const price = parseInt(item.price);
+    const missing = (parseInt(item.price) - money) / 100;
+    let progressvalue = money * 100 / price;
+    let colorScheme = "red";
+    if (progressvalue == price)
+      progressvalue = price;
+    if (progressvalue < 99)
+      colorScheme = "orange";
+    if (progressvalue >= 100)
+      colorScheme = "green";
+    if (missing > 0) {
+      return /* @__PURE__ */ React.createElement(import_react12.VStack, {
+        width: "600px",
+        bg: "gray.400"
+      }, /* @__PURE__ */ React.createElement(import_react13.HStack, null, /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react12.Text, null, "Es fehlen noch ", /* @__PURE__ */ React.createElement("b", null, missing, " \u20AC"), " f\xFCr ", item.name), /* @__PURE__ */ React.createElement(import_react12.Progress, {
+        value: money * 100 / parseInt(item.price),
+        colorScheme,
+        width: "300px"
+      })), /* @__PURE__ */ React.createElement(import_react12.Box, {
+        width: "50px",
+        paddingTop: "20px"
+      }, parseInt(item.price) / 100, " \u20AC"), /* @__PURE__ */ React.createElement(import_react12.Image, {
+        boxSize: "100px",
+        objectFit: "cover",
+        src: `uploads/${item.img}`,
+        alt: "Produktbild"
+      }), /* @__PURE__ */ React.createElement(import_react11.Form, {
+        method: "delete"
+      }, /* @__PURE__ */ React.createElement("button", {
+        name: "delete",
+        type: "submit",
+        className: "button",
+        value: item.id
+      }, "L\xF6schen"))));
+    } else {
+      return /* @__PURE__ */ React.createElement(import_react12.VStack, {
+        width: "600px",
+        bg: "gray.400"
+      }, /* @__PURE__ */ React.createElement(import_react13.HStack, null, /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react12.Text, null, "Du kannst dir ", item.name, " kaufen"), /* @__PURE__ */ React.createElement(import_react12.Progress, {
+        value: money * 100 / parseInt(item.price),
+        colorScheme,
+        width: "300px"
+      })), /* @__PURE__ */ React.createElement(import_react12.Box, {
+        width: "50px",
+        paddingTop: "20px"
+      }, parseInt(item.price) / 100, " \u20AC"), /* @__PURE__ */ React.createElement(import_react12.Image, {
+        boxSize: "100px",
+        objectFit: "cover",
+        src: `uploads/${item.img}`,
+        alt: "Produktbild"
+      }), /* @__PURE__ */ React.createElement(import_react11.Form, {
+        method: "delete"
+      }, /* @__PURE__ */ React.createElement("button", {
+        name: "delete",
+        type: "submit",
+        className: "button",
+        value: item.id
+      }, "L\xF6schen"))));
+    }
   }), /* @__PURE__ */ React.createElement(import_react11.Link, {
     to: "products/new"
   }, "Neues Ziel Hinzuf\xFCgen")));
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "53fe18e9", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-LVCTKMJS.js", "imports": ["/build/_shared/chunk-ELPNL5SZ.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-23FI3SLZ.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-T66NDB7D.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/upload": { "id": "routes/products/upload", "parentId": "root", "path": "products/upload", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/upload-GQB7JHMP.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-53FE18E9.js" };
+var assets_manifest_default = { "version": "d3cf273a", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-SC4I22HR.js", "imports": ["/build/_shared/chunk-2TZTRI7L.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-R7XDJVI7.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-T66NDB7D.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/upload": { "id": "routes/products/upload", "parentId": "root", "path": "products/upload", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/upload-GQB7JHMP.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-D3CF273A.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };

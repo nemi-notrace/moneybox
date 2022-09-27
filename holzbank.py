@@ -13,7 +13,7 @@ import sys
 import random
 import socket
 from subprocess import call
-#import pyttsx3
+import pyttsx3
 
 #serial = i2c(port=1, address=0x3C)
 #device = sh1106(serial)
@@ -95,21 +95,21 @@ def dateiAktualisieren(num):
     fobj_out.write(newmoney)
     fobj_out.close()
     Text = "'Du hast " + Euro(money) + " Euro " + euroCent(money) + " cent'"
- #   if aktuell:
- #       sprechen(Text)
- #   Text = "Guthaben: " + Euro(money) + "," + euroCent(money)
- #   if len(euroCent(money)) < 1:
- #       Text = Text + "0"
- #       Text = Text + " Euro"
+    if aktuell:
+        sprechen(Text)
+    Text = "Guthaben: " + Euro(money) + "," + euroCent(money)
+    if len(euroCent(money)) < 1:
+        Text = Text + "0"
+        Text = Text + " Euro"
  #   Oledprint(Text,30)
 
 
-#def sprechen(text):
-#        engine = pyttsx3.init()
-#        engine.setProperty("rate", 130)
-#        engine.setProperty('voice', "german")
-#        engine.say(text)
-#        engine.runAndWait()
+def sprechen(text):
+        engine = pyttsx3.init()
+        engine.setProperty("rate", 130)
+        engine.setProperty('voice', "german")
+        engine.say(text)
+        engine.runAndWait()
 
 
 # def Oledclear():
@@ -149,7 +149,7 @@ waittime = 0.5
 #Oledprint("Hallo hier ist deine \nsprechende Spardose", 2)
 # ip=([(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1])
 # Oledprint("IP: " + str(ip), 20)
-#sprechen("'Hallo hier ist deine Spardose'")
+sprechen("'Hallo hier ist deine Spardose'")
 dateiAktualisieren(0)
 
 while True:
@@ -158,7 +158,7 @@ while True:
         onecent = onecent + 1
  #       Oledprint("1 CENT ",20)
         Text = "'" + onecentListe[random.randrange(0, listlang, 1)] + "'"
-  #      sprechen(Text)
+        sprechen(Text)
         dateiAktualisieren(1)
         time.sleep(waittime)
         timer = 0
@@ -167,7 +167,7 @@ while True:
         twocent = twocent + 1
    #     Oledprint( "Einwurf 2 CENT",20)
         Text = "'" + twocentListe[random.randrange(0, listlang, 1)] + "'"
-    #    sprechen(Text)
+        sprechen(Text)
         dateiAktualisieren(2)
         time.sleep(waittime)
         timer = 0
@@ -176,7 +176,7 @@ while True:
         fivecent = fivecent + 1
      #   Oledprint( "Einwurf 5 CENT",20)
         Text = "'" + fivecentListe[random.randrange(0, listlang, 1)] + "'"
-      #  sprechen(Text)
+        sprechen(Text)
         dateiAktualisieren(5)
         time.sleep(waittime)
         timer = 0
@@ -185,7 +185,7 @@ while True:
         tencent = tencent + 1
    #     Oledprint( "Einwurf 10 CENT",20)
         Text = "'" + tencentListe[random.randrange(0, listlang, 1)] + "'"
-    #    sprechen(Text)
+        sprechen(Text)
         dateiAktualisieren(10)
         time.sleep(waittime)
         timer = 0
@@ -194,7 +194,7 @@ while True:
         twentycent = twentycent + 1
      #   Oledprint( "Einwurf 20 CENT",20)
         Text = "'" + twentycentListe[random.randrange(0, listlang, 1)] + "'"
-      #  sprechen(Text)
+        sprechen(Text)
         dateiAktualisieren(20)
         time.sleep(waittime)
         timer = 0
@@ -203,7 +203,7 @@ while True:
         fiftycent = fiftycent + 1
      #   Oledprint( "Einwurf 50 CENT",20)
         Text = "'" + fiftycentListe[random.randrange(0, listlang, 1)] + "'"
-     #   sprechen(Text)
+        sprechen(Text)
         dateiAktualisieren(50)
         time.sleep(waittime)
         timer = 0
@@ -212,7 +212,7 @@ while True:
         hundredcent = hundredcent + 1
      #   Oledprint( "Einwurf 1 Euro",20)
         Text = "'" + oneeuroListe[random.randrange(0, listlang, 1)] + "'"
-     #   sprechen(Text)
+        sprechen(Text)
         dateiAktualisieren(100)
         time.sleep(waittime)
         timer = 0
@@ -221,7 +221,7 @@ while True:
         twohundredcent = twohundredcent + 1
      #   Oledprint( "Einwurf 2 Euro",20)
         Text = "'" + twoeuroListe[random.randrange(0, listlang, 1)] + "'"
-     #   sprechen(Text)
+        sprechen(Text)
         dateiAktualisieren(200)
         time.sleep(waittime)
         timer = 0
@@ -229,7 +229,7 @@ while True:
     if (GPIO.input(19) > 0):
         os.system("echo 0 > public/money.txt")
         dateiAktualisieren(0)
-     #   sprechen("'Jetzt bin ich wieder Pleite'")
+        sprechen("'Jetzt bin ich wieder Pleite'")
         time.sleep(waittime)
         timer = 0
 
@@ -239,5 +239,5 @@ while True:
     if timer > random.randrange(10000000, 100000000, 1):
         Text = "'" + warteListe[random.randrange(0, listlang, 1)] + "'"
         Text = "'Willst Du nicht langsam mal wieder etwas einwerfen?'"
-        #sprechen(Text)
+        sprechen(Text)
         timer = 0

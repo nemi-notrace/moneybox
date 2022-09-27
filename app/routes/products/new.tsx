@@ -185,7 +185,7 @@ export default function NewProductRoute() {
             ) : null}
           </Box>
           <Box padding={1}>
-            Bild hinzufügen
+            Bild hinzufügen (max 2.5MB)
             <Input type="file" id="img" name="img" accept="image/*" />
           </Box>
           <Box padding={1}>

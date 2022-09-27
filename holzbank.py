@@ -4,9 +4,9 @@
 
 import RPi.GPIO as GPIO
 import time
-#from luma.core.interface.serial import i2c
-#from luma.core.render import canvas
-#from luma.oled.device import sh1106, ssd1306
+from luma.core.interface.serial import i2c
+from luma.core.render import canvas
+from luma.oled.device import sh1106, ssd1306
 from PIL import ImageFont, ImageDraw, Image
 import os
 import sys
@@ -15,8 +15,8 @@ import socket
 from subprocess import call
 import pyttsx3
 
-#serial = i2c(port=1, address=0x3C)
-#device = sh1106(serial)
+serial = i2c(port=1, address=0x3C)
+device = sh1106(serial)
 font = ImageFont.load_default()
 
 # wichtige Einstellungen
@@ -101,7 +101,7 @@ def dateiAktualisieren(num):
     if len(euroCent(money)) < 1:
         Text = Text + "0"
         Text = Text + " Euro"
- #   Oledprint(Text,30)
+    Oledprint(Text,30)
 
 
 def sprechen(text):
@@ -112,14 +112,14 @@ def sprechen(text):
         engine.runAndWait()
 
 
-# def Oledclear():
-#    with canvas(device) as draw:
-#      draw.rectangle((1,1,127,63), outline=255, fill=0)
+def Oledclear():
+    with canvas(device) as draw:
+      draw.rectangle((1,1,127,63), outline=255, fill=0)
 
-#def Oledprint (text, zeile):
-#    if(display):
-#        with canvas(device) as draw:
-#            draw.text((2, zeile), text, font=font, fill=255)
+def Oledprint (text, zeile):
+    if(display):
+        with canvas(device) as draw:
+            draw.text((2, zeile), text, font=font, fill=255)
 
 def zufall():
     random.seed()
@@ -146,7 +146,7 @@ fiftycent = 0
 hundredcent = 0
 twohundredcent = 0
 waittime = 0.5
-#Oledprint("Hallo hier ist deine \nsprechende Spardose", 2)
+Oledprint("Hallo hier ist deine \nsprechende Spardose", 2)
 # ip=([(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1])
 # Oledprint("IP: " + str(ip), 20)
 sprechen("'Hallo hier ist deine Spardose'")
@@ -156,7 +156,7 @@ while True:
 
     if (GPIO.input(15) > 0):
         onecent = onecent + 1
- #       Oledprint("1 CENT ",20)
+        Oledprint("1 CENT ",20)
         Text = "'" + onecentListe[random.randrange(0, listlang, 1)] + "'"
         sprechen(Text)
         dateiAktualisieren(1)
@@ -165,7 +165,7 @@ while True:
 
     if (GPIO.input(13) > 0):
         twocent = twocent + 1
-   #     Oledprint( "Einwurf 2 CENT",20)
+        Oledprint( "Einwurf 2 CENT",20)
         Text = "'" + twocentListe[random.randrange(0, listlang, 1)] + "'"
         sprechen(Text)
         dateiAktualisieren(2)
@@ -174,7 +174,7 @@ while True:
 
     if (GPIO.input(21) > 0):
         fivecent = fivecent + 1
-     #   Oledprint( "Einwurf 5 CENT",20)
+        Oledprint( "Einwurf 5 CENT",20)
         Text = "'" + fivecentListe[random.randrange(0, listlang, 1)] + "'"
         sprechen(Text)
         dateiAktualisieren(5)
@@ -183,7 +183,7 @@ while True:
 
     if (GPIO.input(26) > 0):
         tencent = tencent + 1
-   #     Oledprint( "Einwurf 10 CENT",20)
+        Oledprint( "Einwurf 10 CENT",20)
         Text = "'" + tencentListe[random.randrange(0, listlang, 1)] + "'"
         sprechen(Text)
         dateiAktualisieren(10)
@@ -192,7 +192,7 @@ while True:
 
     if (GPIO.input(23) > 0):
         twentycent = twentycent + 1
-     #   Oledprint( "Einwurf 20 CENT",20)
+        Oledprint( "Einwurf 20 CENT",20)
         Text = "'" + twentycentListe[random.randrange(0, listlang, 1)] + "'"
         sprechen(Text)
         dateiAktualisieren(20)
@@ -201,7 +201,7 @@ while True:
 
     if (GPIO.input(11) > 0):
         fiftycent = fiftycent + 1
-     #   Oledprint( "Einwurf 50 CENT",20)
+        Oledprint( "Einwurf 50 CENT",20)
         Text = "'" + fiftycentListe[random.randrange(0, listlang, 1)] + "'"
         sprechen(Text)
         dateiAktualisieren(50)
@@ -210,7 +210,7 @@ while True:
 
     if (GPIO.input(18) > 0):
         hundredcent = hundredcent + 1
-     #   Oledprint( "Einwurf 1 Euro",20)
+        Oledprint( "Einwurf 1 Euro",20)
         Text = "'" + oneeuroListe[random.randrange(0, listlang, 1)] + "'"
         sprechen(Text)
         dateiAktualisieren(100)
@@ -219,7 +219,7 @@ while True:
 
     if (GPIO.input(16) > 0):
         twohundredcent = twohundredcent + 1
-     #   Oledprint( "Einwurf 2 Euro",20)
+        Oledprint( "Einwurf 2 Euro",20)
         Text = "'" + twoeuroListe[random.randrange(0, listlang, 1)] + "'"
         sprechen(Text)
         dateiAktualisieren(200)

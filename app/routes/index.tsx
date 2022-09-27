@@ -22,6 +22,7 @@ import {
   Progress,
   Center,
   Image,
+  Button,
 } from "@chakra-ui/react";
 import fs from "fs-extra";
 import { HStack } from "@chakra-ui/react";
@@ -58,7 +59,6 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const products = await db.product.findMany();
-  console.log("Products", products);
   const data: LoaderData = {
     productItems: products,
     money: parseInt(fs.readFileSync("public/money.txt", "utf8")),
@@ -70,17 +70,18 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }) => {
   const form = await request.formData();
   const deleteId = parseInt(String(form.get("delete")));
-
   const product = await db.product.findUnique({
     where: { id: deleteId },
   });
+  console.log(product);
+  fs.removeSync(`public/uploads/${product?.img}`);
+  await db.product.delete({ where: { id: deleteId } });
   if (!product) {
     throw new Response("Man kann nicht löschen was nicht exestiert", {
       status: 404,
     });
   }
 
-  console.log(await db.product.delete({ where: { id: deleteId } }));
   return redirect("/");
 };
 
@@ -120,7 +121,7 @@ export default function Index() {
   return (
     <Container>
       <VStack>
-        <VStack width="600px" bg="purple.300">
+        <VStack width="650px" bg="purple.300">
           <Box width="100px">
             <img src="/pig.png" />
           </Box>
@@ -128,7 +129,6 @@ export default function Index() {
           <Box>
             <Text fontSize="3xl">
               Du hast <b>{money / 100}€</b> gespart.
-              {console.log(money)}
             </Text>
           </Box>
         </VStack>
@@ -142,11 +142,11 @@ export default function Index() {
           if (progressvalue >= 100) colorScheme = "green";
           if (missing > 0) {
             return (
-              <VStack width="600px" bg="gray.400">
+              <VStack width="650px" bg="gray.400">
                 <HStack>
                   <Box>
-                    <Text>
-                      Es fehlen noch <b>{missing} €</b> für {item.name}
+                    <Text fontSize="lg">
+                      Es fehlen noch <b>{missing} €</b> für <b>{item.name}</b>
                     </Text>
 
                     <Progress
@@ -159,30 +159,32 @@ export default function Index() {
                     {parseInt(item.price) / 100} €
                   </Box>
                   <Image
-                    boxSize="100px"
+                    boxSize="150px"
                     objectFit="cover"
                     src={`uploads/${item.img}`}
                     alt="Produktbild"
                   />
                   <Form method="delete">
-                    <button
+                    <Button
                       name="delete"
                       type="submit"
                       className="button"
                       value={item.id}
                     >
                       Löschen
-                    </button>
+                    </Button>
                   </Form>
                 </HStack>
               </VStack>
             );
           } else {
             return (
-              <VStack width="600px" bg="gray.400">
+              <VStack width="650px" bg="gray.400">
                 <HStack>
                   <Box>
-                    <Text>Du kannst dir {item.name} kaufen</Text>
+                    <Text fontSize="lg">
+                      Du kannst dir <b>{item.name} kaufen</b>
+                    </Text>
 
                     <Progress
                       value={(money * 100) / parseInt(item.price)}
@@ -194,27 +196,29 @@ export default function Index() {
                     {parseInt(item.price) / 100} €
                   </Box>
                   <Image
-                    boxSize="100px"
+                    boxSize="150px"
                     objectFit="cover"
                     src={`uploads/${item.img}`}
                     alt="Produktbild"
                   />
                   <Form method="delete">
-                    <button
+                    <Button
                       name="delete"
                       type="submit"
                       className="button"
                       value={item.id}
                     >
                       Löschen
-                    </button>
+                    </Button>
                   </Form>
                 </HStack>
               </VStack>
             );
           }
         })}
-        <Link to="products/new">Neues Ziel Hinzufügen</Link>
+        <Button>
+          <Link to="products/new">Neues Ziel Hinzufügen</Link>
+        </Button>
       </VStack>
     </Container>
   );

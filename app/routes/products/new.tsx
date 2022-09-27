@@ -13,7 +13,17 @@ import {
   unstable_createFileUploadHandler,
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
-
+import {
+  Box,
+  VStack,
+  Text,
+  Container,
+  Progress,
+  Center,
+  Image,
+  Button,
+  Input,
+} from "@chakra-ui/react";
 import fs from "fs-extra";
 import {
   unstable_composeUploadHandlers,
@@ -127,13 +137,15 @@ export default function NewProductRoute() {
   }
 
   return (
-    <div>
-      <p>Ein neues Ziel hinzufügen</p>
-      <Form method="post" encType="multipart/form-data">
-        <div>
-          <label>
-            Name:{" "}
-            <input
+    <Center>
+      <Box border="1px" padding={5} margin={5} width={600}>
+        <Text fontSize="xl"> Ein neues Ziel hinzufügen</Text>
+
+        <Form method="post" encType="multipart/form-data">
+          <Box padding={1}>
+            <Text>Name: </Text>
+            <Input
+              placeholder="z.B. Schuhe"
               type="text"
               defaultValue={actionData?.fields?.name}
               name="name"
@@ -142,52 +154,53 @@ export default function NewProductRoute() {
                 actionData?.fieldErrors?.name ? "name-error" : undefined
               }
             />
-          </label>
-          {actionData?.fieldErrors?.name ? (
-            <p className="form-validation-error" role="alert" id="name-error">
-              {actionData.fieldErrors.name}
-            </p>
-          ) : null}
-        </div>
-        <div>
-          <label>
-            Preis:{" "}
-            <textarea
-              defaultValue={actionData?.fields?.price}
-              name="price"
-              aria-invalid={Boolean(actionData?.fieldErrors?.price)}
-              aria-errormessage={
-                actionData?.fieldErrors?.price ? "price-error" : undefined
-              }
-            />
-          </label>
-          {actionData?.fieldErrors?.price ? (
-            <p className="form-validation-error" role="alert" id="price-error">
-              {actionData.fieldErrors.price}
-            </p>
-          ) : null}
-        </div>
-        <div>
-          Bild hinzufügen
-          <input
-            type="file"
-            id="img"
-            name="img"
-            accept="image/png, image/jpg"
-          />
-        </div>
-        <div>
-          {actionData?.formError ? (
-            <p className="form-validation-error" role="alert">
-              {actionData.formError}
-            </p>
-          ) : null}
-          <button type="submit" className="button">
-            Hinzufügen
-          </button>
-        </div>
-      </Form>
-    </div>
+
+            {actionData?.fieldErrors?.name ? (
+              <p className="form-validation-error" role="alert" id="name-error">
+                <Text color="red.400">{actionData.fieldErrors.name}</Text>
+              </p>
+            ) : null}
+          </Box>
+          <Box padding={1}>
+            <label>
+              <Text>Preis in Cent: </Text>
+              <Input
+                placeholder="2000"
+                defaultValue={actionData?.fields?.price}
+                name="price"
+                aria-invalid={Boolean(actionData?.fieldErrors?.price)}
+                aria-errormessage={
+                  actionData?.fieldErrors?.price ? "price-error" : undefined
+                }
+              />
+            </label>
+            {actionData?.fieldErrors?.price ? (
+              <p
+                className="form-validation-error"
+                role="alert"
+                id="price-error"
+              >
+                <Text color="red.400"> {actionData.fieldErrors.price} </Text>
+              </p>
+            ) : null}
+          </Box>
+          <Box padding={1}>
+            Bild hinzufügen
+            <Input type="file" id="img" name="img" accept="image/*" />
+          </Box>
+          <Box padding={1}>
+            {actionData?.formError ? (
+              <p className="form-validation-error" role="alert">
+                <Text color="red.400">{actionData.formError}</Text>
+              </p>
+            ) : null}
+            <Button type="submit" className="button">
+              Hinzufügen
+            </Button>
+          </Box>
+        </Form>
+      </Box>
+    </Center>
   );
 }
 

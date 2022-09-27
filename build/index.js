@@ -295,6 +295,7 @@ __export(new_exports, {
 var import_node3 = require("@remix-run/node");
 var import_react9 = require("@remix-run/react");
 var import_node4 = require("@remix-run/node");
+var import_react10 = require("@chakra-ui/react");
 var import_node5 = require("@remix-run/node");
 var loader2 = async ({ request }) => {
   return (0, import_node3.json)({});
@@ -355,20 +356,35 @@ function NewProductRoute() {
       return /* @__PURE__ */ React.createElement("div", null);
     }
   }
-  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", null, "Ein neues Ziel hinzuf\xFCgen"), /* @__PURE__ */ React.createElement(import_react9.Form, {
+  return /* @__PURE__ */ React.createElement(import_react10.Center, null, /* @__PURE__ */ React.createElement(import_react10.Box, {
+    border: "1px",
+    padding: 5,
+    margin: 5,
+    width: 600
+  }, /* @__PURE__ */ React.createElement(import_react10.Text, {
+    fontSize: "xl"
+  }, " Ein neues Ziel hinzuf\xFCgen"), /* @__PURE__ */ React.createElement(import_react9.Form, {
     method: "post",
     encType: "multipart/form-data"
-  }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", null, "Name:", " ", /* @__PURE__ */ React.createElement("input", {
+  }, /* @__PURE__ */ React.createElement(import_react10.Box, {
+    padding: 1
+  }, /* @__PURE__ */ React.createElement(import_react10.Text, null, "Name: "), /* @__PURE__ */ React.createElement(import_react10.Input, {
+    placeholder: "z.B. Schuhe",
     type: "text",
     defaultValue: (_a = actionData == null ? void 0 : actionData.fields) == null ? void 0 : _a.name,
     name: "name",
     "aria-invalid": Boolean((_b = actionData == null ? void 0 : actionData.fieldErrors) == null ? void 0 : _b.name),
     "aria-errormessage": ((_c = actionData == null ? void 0 : actionData.fieldErrors) == null ? void 0 : _c.name) ? "name-error" : void 0
-  })), ((_d = actionData == null ? void 0 : actionData.fieldErrors) == null ? void 0 : _d.name) ? /* @__PURE__ */ React.createElement("p", {
+  }), ((_d = actionData == null ? void 0 : actionData.fieldErrors) == null ? void 0 : _d.name) ? /* @__PURE__ */ React.createElement("p", {
     className: "form-validation-error",
     role: "alert",
     id: "name-error"
-  }, actionData.fieldErrors.name) : null), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", null, "Preis:", " ", /* @__PURE__ */ React.createElement("textarea", {
+  }, /* @__PURE__ */ React.createElement(import_react10.Text, {
+    color: "red.400"
+  }, actionData.fieldErrors.name)) : null), /* @__PURE__ */ React.createElement(import_react10.Box, {
+    padding: 1
+  }, /* @__PURE__ */ React.createElement("label", null, /* @__PURE__ */ React.createElement(import_react10.Text, null, "Preis in Cent: "), /* @__PURE__ */ React.createElement(import_react10.Input, {
+    placeholder: "2000",
     defaultValue: (_e = actionData == null ? void 0 : actionData.fields) == null ? void 0 : _e.price,
     name: "price",
     "aria-invalid": Boolean((_f = actionData == null ? void 0 : actionData.fieldErrors) == null ? void 0 : _f.price),
@@ -377,18 +393,26 @@ function NewProductRoute() {
     className: "form-validation-error",
     role: "alert",
     id: "price-error"
-  }, actionData.fieldErrors.price) : null), /* @__PURE__ */ React.createElement("div", null, "Bild hinzuf\xFCgen", /* @__PURE__ */ React.createElement("input", {
+  }, /* @__PURE__ */ React.createElement(import_react10.Text, {
+    color: "red.400"
+  }, " ", actionData.fieldErrors.price, " ")) : null), /* @__PURE__ */ React.createElement(import_react10.Box, {
+    padding: 1
+  }, "Bild hinzuf\xFCgen", /* @__PURE__ */ React.createElement(import_react10.Input, {
     type: "file",
     id: "img",
     name: "img",
-    accept: "image/png, image/jpg"
-  })), /* @__PURE__ */ React.createElement("div", null, (actionData == null ? void 0 : actionData.formError) ? /* @__PURE__ */ React.createElement("p", {
+    accept: "image/*"
+  })), /* @__PURE__ */ React.createElement(import_react10.Box, {
+    padding: 1
+  }, (actionData == null ? void 0 : actionData.formError) ? /* @__PURE__ */ React.createElement("p", {
     className: "form-validation-error",
     role: "alert"
-  }, actionData.formError) : null, /* @__PURE__ */ React.createElement("button", {
+  }, /* @__PURE__ */ React.createElement(import_react10.Text, {
+    color: "red.400"
+  }, actionData.formError)) : null, /* @__PURE__ */ React.createElement(import_react10.Button, {
     type: "submit",
     className: "button"
-  }, "Hinzuf\xFCgen"))));
+  }, "Hinzuf\xFCgen")))));
 }
 function CatchBoundary2() {
   const caught = (0, import_react9.useCatch)();
@@ -429,14 +453,13 @@ __export(routes_exports, {
   loader: () => loader4
 });
 var import_node7 = require("@remix-run/node");
-var import_react10 = require("react");
-var import_react11 = require("@remix-run/react");
-var import_react12 = require("@chakra-ui/react");
-var import_fs_extra2 = __toESM(require("fs-extra"));
+var import_react11 = require("react");
+var import_react12 = require("@remix-run/react");
 var import_react13 = require("@chakra-ui/react");
+var import_fs_extra2 = __toESM(require("fs-extra"));
+var import_react14 = require("@chakra-ui/react");
 var loader4 = async ({ request, params }) => {
   const products = await db.product.findMany();
-  console.log("Products", products);
   const data = {
     productItems: products,
     money: parseInt(import_fs_extra2.default.readFileSync("public/money.txt", "utf8"))
@@ -449,23 +472,25 @@ var action4 = async ({ request, params }) => {
   const product = await db.product.findUnique({
     where: { id: deleteId }
   });
+  console.log(product);
+  import_fs_extra2.default.removeSync(`public/uploads/${product == null ? void 0 : product.img}`);
+  await db.product.delete({ where: { id: deleteId } });
   if (!product) {
     throw new Response("Man kann nicht l\xF6schen was nicht exestiert", {
       status: 404
     });
   }
-  console.log(await db.product.delete({ where: { id: deleteId } }));
   return (0, import_node7.redirect)("/");
 };
 function Index2() {
-  const data = (0, import_react11.useLoaderData)();
-  const [money, setMoney] = (0, import_react10.useState)(data.money);
-  const fetcher = (0, import_react11.useFetcher)();
+  const data = (0, import_react12.useLoaderData)();
+  const [money, setMoney] = (0, import_react11.useState)(data.money);
+  const fetcher = (0, import_react12.useFetcher)();
   if (data.money === null || data.money === void 0 || data.money === 0) {
     setMoney(0);
   }
   const socket = useSocket();
-  (0, import_react10.useEffect)(() => {
+  (0, import_react11.useEffect)(() => {
     if (!socket)
       return;
     socket.on("event", (data2) => {
@@ -473,21 +498,21 @@ function Index2() {
     });
     socket.emit("event", "ping");
   }, [socket, fetcher]);
-  (0, import_react10.useEffect)(() => {
+  (0, import_react11.useEffect)(() => {
     if (!fetcher.data)
       return;
     setMoney(fetcher.data.money);
   });
-  return /* @__PURE__ */ React.createElement(import_react12.Container, null, /* @__PURE__ */ React.createElement(import_react12.VStack, null, /* @__PURE__ */ React.createElement(import_react12.VStack, {
-    width: "600px",
+  return /* @__PURE__ */ React.createElement(import_react13.Container, null, /* @__PURE__ */ React.createElement(import_react13.VStack, null, /* @__PURE__ */ React.createElement(import_react13.VStack, {
+    width: "650px",
     bg: "purple.300"
-  }, /* @__PURE__ */ React.createElement(import_react12.Box, {
+  }, /* @__PURE__ */ React.createElement(import_react13.Box, {
     width: "100px"
   }, /* @__PURE__ */ React.createElement("img", {
     src: "/pig.png"
-  })), /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react12.Text, {
+  })), /* @__PURE__ */ React.createElement(import_react13.Box, null, /* @__PURE__ */ React.createElement(import_react13.Text, {
     fontSize: "3xl"
-  }, "Du hast ", /* @__PURE__ */ React.createElement("b", null, money / 100, "\u20AC"), " gespart.", console.log(money)))), data.productItems.map((item, i) => {
+  }, "Du hast ", /* @__PURE__ */ React.createElement("b", null, money / 100, "\u20AC"), " gespart."))), data.productItems.map((item, i) => {
     const price = parseInt(item.price);
     const missing = (parseInt(item.price) - money) / 100;
     let progressvalue = money * 100 / price;
@@ -499,61 +524,65 @@ function Index2() {
     if (progressvalue >= 100)
       colorScheme = "green";
     if (missing > 0) {
-      return /* @__PURE__ */ React.createElement(import_react12.VStack, {
-        width: "600px",
+      return /* @__PURE__ */ React.createElement(import_react13.VStack, {
+        width: "650px",
         bg: "gray.400"
-      }, /* @__PURE__ */ React.createElement(import_react13.HStack, null, /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react12.Text, null, "Es fehlen noch ", /* @__PURE__ */ React.createElement("b", null, missing, " \u20AC"), " f\xFCr ", item.name), /* @__PURE__ */ React.createElement(import_react12.Progress, {
+      }, /* @__PURE__ */ React.createElement(import_react14.HStack, null, /* @__PURE__ */ React.createElement(import_react13.Box, null, /* @__PURE__ */ React.createElement(import_react13.Text, {
+        fontSize: "lg"
+      }, "Es fehlen noch ", /* @__PURE__ */ React.createElement("b", null, missing, " \u20AC"), " f\xFCr ", /* @__PURE__ */ React.createElement("b", null, item.name)), /* @__PURE__ */ React.createElement(import_react13.Progress, {
         value: money * 100 / parseInt(item.price),
         colorScheme,
         width: "300px"
-      })), /* @__PURE__ */ React.createElement(import_react12.Box, {
+      })), /* @__PURE__ */ React.createElement(import_react13.Box, {
         width: "50px",
         paddingTop: "20px"
-      }, parseInt(item.price) / 100, " \u20AC"), /* @__PURE__ */ React.createElement(import_react12.Image, {
-        boxSize: "100px",
+      }, parseInt(item.price) / 100, " \u20AC"), /* @__PURE__ */ React.createElement(import_react13.Image, {
+        boxSize: "150px",
         objectFit: "cover",
         src: `uploads/${item.img}`,
         alt: "Produktbild"
-      }), /* @__PURE__ */ React.createElement(import_react11.Form, {
+      }), /* @__PURE__ */ React.createElement(import_react12.Form, {
         method: "delete"
-      }, /* @__PURE__ */ React.createElement("button", {
+      }, /* @__PURE__ */ React.createElement(import_react13.Button, {
         name: "delete",
         type: "submit",
         className: "button",
         value: item.id
       }, "L\xF6schen"))));
     } else {
-      return /* @__PURE__ */ React.createElement(import_react12.VStack, {
-        width: "600px",
+      return /* @__PURE__ */ React.createElement(import_react13.VStack, {
+        width: "650px",
         bg: "gray.400"
-      }, /* @__PURE__ */ React.createElement(import_react13.HStack, null, /* @__PURE__ */ React.createElement(import_react12.Box, null, /* @__PURE__ */ React.createElement(import_react12.Text, null, "Du kannst dir ", item.name, " kaufen"), /* @__PURE__ */ React.createElement(import_react12.Progress, {
+      }, /* @__PURE__ */ React.createElement(import_react14.HStack, null, /* @__PURE__ */ React.createElement(import_react13.Box, null, /* @__PURE__ */ React.createElement(import_react13.Text, {
+        fontSize: "lg"
+      }, "Du kannst dir ", /* @__PURE__ */ React.createElement("b", null, item.name, " kaufen")), /* @__PURE__ */ React.createElement(import_react13.Progress, {
         value: money * 100 / parseInt(item.price),
         colorScheme,
         width: "300px"
-      })), /* @__PURE__ */ React.createElement(import_react12.Box, {
+      })), /* @__PURE__ */ React.createElement(import_react13.Box, {
         width: "50px",
         paddingTop: "20px"
-      }, parseInt(item.price) / 100, " \u20AC"), /* @__PURE__ */ React.createElement(import_react12.Image, {
-        boxSize: "100px",
+      }, parseInt(item.price) / 100, " \u20AC"), /* @__PURE__ */ React.createElement(import_react13.Image, {
+        boxSize: "150px",
         objectFit: "cover",
         src: `uploads/${item.img}`,
         alt: "Produktbild"
-      }), /* @__PURE__ */ React.createElement(import_react11.Form, {
+      }), /* @__PURE__ */ React.createElement(import_react12.Form, {
         method: "delete"
-      }, /* @__PURE__ */ React.createElement("button", {
+      }, /* @__PURE__ */ React.createElement(import_react13.Button, {
         name: "delete",
         type: "submit",
         className: "button",
         value: item.id
       }, "L\xF6schen"))));
     }
-  }), /* @__PURE__ */ React.createElement(import_react11.Link, {
+  }), /* @__PURE__ */ React.createElement(import_react13.Button, null, /* @__PURE__ */ React.createElement(import_react12.Link, {
     to: "products/new"
-  }, "Neues Ziel Hinzuf\xFCgen")));
+  }, "Neues Ziel Hinzuf\xFCgen"))));
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "d3cf273a", "entry": { "module": "/build/entry.client-AKU3T2ZP.js", "imports": ["/build/_shared/chunk-7TQWREO2.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-SC4I22HR.js", "imports": ["/build/_shared/chunk-2TZTRI7L.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-R7XDJVI7.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-T66NDB7D.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/upload": { "id": "routes/products/upload", "parentId": "root", "path": "products/upload", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/upload-GQB7JHMP.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-D3CF273A.js" };
+var assets_manifest_default = { "version": "092e051d", "entry": { "module": "/build/entry.client-YWLP4ZPI.js", "imports": ["/build/_shared/chunk-MFAXCCHX.js", "/build/_shared/chunk-K2N6UOBS.js", "/build/_shared/chunk-7UK5LOUV.js", "/build/_shared/chunk-OCA52GWZ.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-V4JPNLIX.js", "imports": ["/build/_shared/chunk-GD7KQGLH.js"], "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/fetchMoney": { "id": "routes/fetchMoney", "parentId": "root", "path": "fetchMoney", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/fetchMoney-OVHJ2PCJ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-XN4AQKQP.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/products/$id": { "id": "routes/products/$id", "parentId": "root", "path": "products/:id", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/$id-3WALS6GE.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/new": { "id": "routes/products/new", "parentId": "root", "path": "products/new", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/new-3QUDK4AU.js", "imports": ["/build/_shared/chunk-UVX52VVJ.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": true }, "routes/products/upload": { "id": "routes/products/upload", "parentId": "root", "path": "products/upload", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/products/upload-GQB7JHMP.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-092E051D.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };

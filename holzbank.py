@@ -236,8 +236,8 @@ while True:
     timer = timer + 1
     #        print timer
 
-    if timer > random.randrange(10000000, 100000000, 1):
-        Text = "'" + warteListe[random.randrange(0, listlang, 1)] + "'"
-        Text = "'Willst Du nicht langsam mal wieder etwas einwerfen?'"
-        sprechen(Text)
-        timer = 0
+   # if timer > random.randrange(10000000, 100000000, 1):
+   #     Text = "'" + warteListe[random.randrange(0, listlang, 1)] + "'"
+   #     Text = "'Willst Du nicht langsam mal wieder etwas einwerfen?'"
+   #     sprechen(Text)
+   #     timer = 0

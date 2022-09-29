@@ -227,7 +227,7 @@ while True:
         timer = 0
 
     if (GPIO.input(19) > 0):
-        os.system("echo 0 > home/pi/mbox/moneybox/public/money.txt")
+        os.system("echo 0 > public/money.txt")
         dateiAktualisieren(0)
         sprechen("'Jetzt bin ich wieder Pleite'")
         time.sleep(waittime)
